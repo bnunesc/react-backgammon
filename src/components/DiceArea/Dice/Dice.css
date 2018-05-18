@@ -1,0 +1,52 @@
+:root {
+  --diceColor: rgb(248, 248, 248);
+  --diceDots: rgb(53, 53, 53);
+}
+
+.dice {
+  position: relative;
+  width: 10%;
+  margin: 2% 3%;
+}
+
+.dice::before {
+  content: "";
+  padding-top: 100%;
+  display: block;
+}
+
+.diceContent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  border-radius: 15%;
+  padding: 10%;
+  background-color: var(--diceColor);
+  box-shadow: 1px 1px 5px 3px rgba(255, 255, 255, 0.5) inset, -1px -1px 5px 3px rgba(0, 0, 0, 0.5) inset, 5px 5px 3px 6px rgba(0, 0, 0, 0.5);
+}
+
+.diceRow {
+  height: 33.3%;
+}
+
+.diceColum {
+  width: 33.3%;
+  height: 100%;
+  float: left;
+  padding: 5%;
+}
+
+.diceFilled {
+  width: 100%;
+  height: 100%;
+  background-color: var(--diceDots);
+  border-radius: 50%;
+}
+
+@media screen and (max-width: 800px) {
+  .diceContent {
+    box-shadow: 1px 1px 4px 2px rgba(255, 255, 255, 0.5) inset, -1px -1px 4px 2px rgba(0, 0, 0, 0.5) inset, 5px 5px 3px 6px rgba(0, 0, 0, 0.5);
+  }
+}

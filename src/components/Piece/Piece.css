@@ -1,0 +1,65 @@
+:root {
+    --pieceC1: rgb(211, 211, 211);
+    --pieceC1Detail: rgb(88, 88, 88);
+    --pieceC1Label: rgb(59, 59, 59);
+    --pieceC2: rgb(53, 53, 53);
+    --pieceC2Detail: rgb(161, 161, 161);
+    --pieceC2Label: rgb(204, 204, 204);
+    --canMove: rgba(0, 255, 0, 0.32);
+}
+
+div.piece {
+    position: relative;
+    width: 70%;
+    margin: 0px auto;
+    overflow: hidden;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+div.pieceP1 {
+    background: radial-gradient(circle, var(--pieceC1) 0%, var(--pieceC1) 40%, var(--pieceC1Detail) 45%, var(--pieceC1) 50%, var(--pieceC1) 55%, var(--pieceC1Detail) 60%, var(--pieceC1) 65%, var(--pieceC1) 100%);
+    box-shadow: -3px -3px 5px 5px rgba(0, 0, 0, 0.5) inset, 2px 2px 5px 3px rgba(255, 255, 255, 0.3) inset;
+}
+
+div.pieceP2 {
+    background: radial-gradient(circle, var(--pieceC2) 0%, var(--pieceC2) 40%, var(--pieceC2Detail) 45%, var(--pieceC2) 50%, var(--pieceC2) 55%, var(--pieceC2Detail) 60%, var(--pieceC2) 65%, var(--pieceC2) 100%);
+    box-shadow: -3px -3px 5px 5px rgba(0, 0, 0, 0.5) inset, 2px 2px 5px 5px rgba(255, 255, 255, 0.0) inset;
+}
+
+div.piece:before {
+    content: "";
+    padding-top: 100%;
+    display: block;
+}
+
+div.piece p {
+    position: absolute;
+    top: 21%;
+    left: 0;
+    right: 0;
+    height: 100%;
+    font-size: 1.8vw;
+    text-align: center;
+    font-weight: bold;
+}
+
+div.pieceP1 p {
+    color: var(--pieceC1Label);
+}
+
+div.pieceP2 p {
+    color: var(--pieceC2Label);
+}
+
+div.canMove {
+    animation-name: canMove;
+    animation-duration: 1.5s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes canMove {
+    0% {box-shadow: 0 0 15px 50px var(--canMove) inset;}
+    50% {box-shadow: 2px 2px 5px 3px rgba(255, 255, 255, 0.0) inset;}
+    100% {box-shadow: 0 0 15px 50px var(--canMove) inset;}
+}
