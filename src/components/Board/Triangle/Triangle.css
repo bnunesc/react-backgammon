@@ -1,0 +1,80 @@
+:root {
+  --color1: rgba(221, 201, 181, 0.79);
+  --color2: rgba(153, 34, 34, 0.72);
+  --receiveColor: rgba(62, 187, 37, 0.608);
+}
+
+.triangle {
+  height: 100%;
+}
+
+.trianglePart {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+}
+
+.triangleLeftUp {
+  left: 0;
+  background: linear-gradient(to left bottom, var(--color2) 0%, var(--color2) 49%, transparent 51%);
+}
+
+.triangleRightUp {
+  left: 50%;
+  background: linear-gradient(to right bottom, var(--color2) 0%, var(--color2) 49%, transparent 51%);
+}
+
+.triangleLeftUpC2 {
+  left: 0;
+  background: linear-gradient(to left bottom, var(--color1) 0%, var(--color1) 49%, transparent 51%);
+}
+
+.triangleRightUpC2 {
+  left: 50%;
+  background: linear-gradient(to right bottom, var(--color1) 0%, var(--color1) 49%, transparent 51%);
+}
+
+.triangleLeftUpReceivable {
+  left: 0;
+  background: linear-gradient(to left bottom, var(--receiveColor) 0%, var(--receiveColor) 49%, transparent 51%);
+}
+
+.triangleRightUpReceivable {
+  left: 50%;
+  background: linear-gradient(to right bottom, var(--receiveColor) 0%, var(--receiveColor) 49%, transparent 51%);
+}
+
+.triangleLeftDown {
+  left: 0;
+  background: linear-gradient(to left top, var(--color2) 0%, var(--color2) 49%, transparent 51%);
+}
+
+.triangleRightDown {
+  left: 50%;
+  background: linear-gradient(to right top, var(--color2) 0%, var(--color2) 49%, transparent 51%);
+}
+
+.triangleLeftDownC2 {
+  left: 0;
+  background: linear-gradient(to left top, var(--color1) 0%, var(--color1) 49%, transparent 51%);
+}
+
+.triangleRightDownC2 {
+  left: 50%;
+  background: linear-gradient(to right top, var(--color1) 0%, var(--color1) 49%, transparent 51%);
+}
+
+.triangleLeftDownReceivable {
+  left: 0;
+  background: linear-gradient(to left top, var(--receiveColor) 0%, var(--receiveColor) 49%, transparent 51%);
+}
+
+.triangleRightDownReceivable {
+  left: 50%;
+  background: linear-gradient(to right top, var(--receiveColor) 0%, var(--receiveColor) 49%, transparent 51%);
+}
+
+.containerClickable {
+  cursor: pointer;
+}

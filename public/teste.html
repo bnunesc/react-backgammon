@@ -1,0 +1,1081 @@
+<html>
+
+<head>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script>
+
+        let count = 0;
+        function test() {
+            count++;
+            console.log('clicked' + count);
+        }
+
+
+    </script>
+
+    <style>
+        :root {
+            --main-bg-color: rgba(153, 34, 34, 0.72);
+            --color2: rgba(221, 201, 181, 0.79);
+            --pieceC1: rgb(53, 53, 53);
+            --pieceC1Detail: rgb(161, 161, 161);
+            --pieceC1Label: rgb(204, 204, 204);
+            --pieceC2: rgb(211, 211, 211);
+            --pieceC2Detail: rgb(88, 88, 88);
+            --pieceC2Label: rgb(59, 59, 59);
+            --diceColor: rgb(248, 248, 248);
+            --diceDots: rgb(53, 53, 53);
+        }
+
+        #status {
+            position: relative;
+            background-color: gray;
+            min-width: 500px;
+            padding: 1% 0;
+        }
+
+        #wrapper {
+            position: relative;
+            width: 100%;
+            min-width: 500px;
+            padding-top: 56.7%;
+            clear: both;
+        }
+
+        #game {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            min-height: 282px;
+        }
+
+        #board {
+            background-image: url(images/wood.jpg);
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            height: 100%;
+        }
+
+        #leftSide {
+            position: absolute;
+            top: 2%;
+            left: 3%;
+            bottom: 2%;
+            width: 38.5%;
+            display: block;
+            background-image: url(images/fabric.jpg);
+        }
+
+        #grayBar {
+            position: absolute;
+            top: 2%;
+            left: 41.5%;
+            bottom: 2%;
+            width: 6.42%;
+            display: block;
+        }
+
+        #rightSide {
+            position: absolute;
+            top: 2%;
+            left: 48%;
+            bottom: 2%;
+            width: 38.5%;
+            display: block;
+            background-image: url(images/fabric.jpg);
+        }
+
+        #outSide {
+            position: absolute;
+            top: 2%;
+            left: 92%;
+            bottom: 2%;
+            width: 4.5%;
+            display: block;
+            background-image: url(images/fabric.jpg);
+        }
+
+        .undoButton {
+            position: absolute;
+            top: 45%;
+            height: 10%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .undoButton button {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            font-size: 1.22vw;
+            font-weight: bold;
+        }
+
+        .shadowBox {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            box-shadow: 3px 3px 5px 5px rgba(0, 0, 0, 0.5) inset;
+            pointer-events: none;
+        }
+
+        .diceArea {
+            position: absolute;
+            top: 45%;
+            height: 10%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .rollButton {
+            position: relative;
+            width: 20%;
+            margin: 2% 3%;
+        }
+
+        .rollButton::before {
+            content: "";
+            padding-top: 50%;
+            display: block;
+        }
+
+        .rollButtonContent {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            text-align: center;
+            border-radius: 5px;
+            background-color: var(--diceColor);
+            box-shadow: 1px 1px 5px 5px rgba(255, 255, 255, 0.5) inset,
+            -1px -1px 5px 5px rgba(0, 0, 0, 0.5) inset,
+            5px 5px 3px 6px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+        }
+
+
+
+        .rollButtonContent p {
+            margin-top: 10%;
+            font-weight: bold;
+            font-size: 1.5vw;
+
+        }
+
+
+        .dice {
+            position: relative;
+            width: 10%;
+            margin: 2% 3%;
+        }
+
+        .dice::before {
+            content: "";
+            padding-top: 100%;
+            display: block;
+        }
+
+        .diceContent {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            border-radius: 15%;
+            padding: 10%;
+            background-color: var(--diceColor);
+            box-shadow: 1px 1px 5px 5px rgba(255, 255, 255, 0.5) inset,
+            -1px -1px 5px 5px rgba(0, 0, 0, 0.5) inset,
+            5px 5px 3px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        .diceRow {
+            height: 33.3%;
+        }
+
+        .diceColum {
+            width: 33.3%;
+            height: 100%;
+            float: left;
+            padding: 5%;
+        }
+
+        .diceFilled {
+            width: 100%;
+            height: 100%;
+            background-color: var(--diceDots);
+            border-radius: 50%;
+        }
+
+        @media screen and (max-width: 800px) {
+            .rollButtonContent {
+                box-shadow: 1px 1px 4px 2px rgba(255, 255, 255, 0.5) inset,
+                -1px -1px 4px 2px rgba(0, 0, 0, 0.5) inset,
+                5px 5px 3px 6px rgba(0, 0, 0, 0.5);
+            }
+
+            .diceContent {
+                box-shadow: 1px 1px 4px 2px rgba(255, 255, 255, 0.5) inset,
+                -1px -1px 4px 2px rgba(0, 0, 0, 0.5) inset,
+                5px 5px 3px 6px rgba(0, 0, 0, 0.5);
+            }
+        }
+
+        .blocksUp {
+            position: absolute;
+            top: 0;
+            height: 45%;
+            width: 100%;
+        }
+
+        .blocksDown {
+            position: absolute;
+            bottom: 0;
+            height: 45%;
+            width: 100%;
+        }
+
+        .triangle {
+            height: 100%;
+        }
+
+        .trianglePart {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 50%;
+        }
+
+        .triangleLeftUp {
+            left: 0;
+            background: linear-gradient(to left bottom, var(--main-bg-color) 0%, var(--main-bg-color) 49%, transparent 51%);
+        }
+
+        .triangleRightUp {
+            left: 50%;
+            background: linear-gradient(to right bottom, var(--main-bg-color) 0%, var(--main-bg-color) 49%, transparent 51%);
+        }
+
+        .triangleLeftUpC2 {
+            left: 0;
+            background: linear-gradient(to left bottom, var(--color2) 0%, var(--color2) 49%, transparent 51%);
+        }
+
+        .triangleRightUpC2 {
+            left: 50%;
+            background: linear-gradient(to right bottom, var(--color2) 0%, var(--color2) 49%, transparent 51%);
+        }
+
+        .triangleLeftDown {
+            left: 0;
+            background: linear-gradient(to left top, var(--main-bg-color) 0%, var(--main-bg-color) 49%, transparent 51%);
+        }
+
+        .triangleRightDown {
+            left: 50%;
+            background: linear-gradient(to right top, var(--main-bg-color) 0%, var(--main-bg-color) 49%, transparent 51%);
+        }
+
+        .triangleLeftDownC2 {
+            left: 0;
+            background: linear-gradient(to left top, var(--color2) 0%, var(--color2) 49%, transparent 51%);
+        }
+
+        .triangleRightDownC2 {
+            left: 50%;
+            background: linear-gradient(to right top, var(--color2) 0%, var(--color2) 49%, transparent 51%);
+        }
+
+        .pieceContainer {
+            position: absolute;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            display: flex;
+            flex-flow: column;
+        }
+
+        .pieceContainerDown {
+            flex-flow: column-reverse;
+        }
+
+        div.pieceFlat {
+            position: relative;
+            width: 100%;
+            margin: 0px auto;
+            overflow: hidden;
+            border-radius: 15% 15% 50% 50%;
+            box-shadow: -2px -2px 5px 2px rgba(0, 0, 0, 0.5) inset, 2px 2px 5px 3px rgba(255, 255, 255, 0.3) inset;
+        }
+
+        .pieceContainerDown div.pieceFlat {
+            border-radius: 50% 50% 15% 15%;
+        }
+
+        div.pieceFlat:before {
+            content: "";
+            padding-top: 36%;
+            display: block;
+        }
+
+        div.pieceFlatC1 {
+            background: linear-gradient(to bottom,
+            var(--pieceC1) 0%,
+            var(--pieceC1) 65%,
+            var(--pieceC1Detail) 70%,
+            var(--pieceC1) 75%,
+            var(--pieceC1) 80%,
+            var(--pieceC1Detail) 85%,
+            var(--pieceC1) 90%,
+            var(--pieceC1) 100%);
+
+        }
+
+
+        div.pieceFlatC2 {
+            background: linear-gradient(to top,
+            var(--pieceC2) 0%,
+            var(--pieceC2) 65%,
+            var(--pieceC2Detail) 70%,
+            var(--pieceC2) 75%,
+            var(--pieceC2) 80%,
+            var(--pieceC2Detail) 85%,
+            var(--pieceC2) 90%,
+            var(--pieceC2) 100%);
+        }
+
+        @media screen and (max-width: 800px) {
+            div.pieceFlat {
+                box-shadow: -1px -1px 4px 1px rgba(0, 0, 0, 0.5) inset, 1px 1px 1px 1px rgba(255, 255, 255, 0.0) inset;
+            }
+        }
+
+        div.piece {
+            position: relative;
+            width: 70%;
+            margin: 0px auto;
+            overflow: hidden;
+            border-radius: 50%;
+        }
+
+        div.pieceC1 {
+            background: radial-gradient(circle,
+            var(--pieceC1) 0%,
+            var(--pieceC1) 40%,
+            var(--pieceC1Detail) 45%,
+            var(--pieceC1) 50%,
+            var(--pieceC1) 55%,
+            var(--pieceC1Detail) 60%,
+            var(--pieceC1) 65%,
+            var(--pieceC1) 100%);
+            box-shadow: -3px -3px 5px 5px rgba(0, 0, 0, 0.5) inset, 2px 2px 5px 3px rgba(255, 255, 255, 0.3) inset;
+        }
+
+        div.pieceC2 {
+            background: radial-gradient(circle,
+            var(--pieceC2) 0%,
+            var(--pieceC2) 40%,
+            var(--pieceC2Detail) 45%,
+            var(--pieceC2) 50%,
+            var(--pieceC2) 55%,
+            var(--pieceC2Detail) 60%,
+            var(--pieceC2) 65%,
+            var(--pieceC2) 100%);
+            box-shadow: -3px -3px 5px 5px rgba(0, 0, 0, 0.5) inset, 2px 2px 5px 5px rgba(255, 255, 255, 0.0) inset;
+        }
+
+        div.piece:before {
+            content: "";
+            padding-top: 100%;
+            display: block;
+        }
+
+        div.piece p {
+            position: absolute;
+            top: 21%;
+            left: 0;
+            right: 0;
+            height: 100%;
+            font-size: 1.8vw;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        div.pieceC1 p {
+            color: var(--pieceC1Label);
+        }
+
+        div.pieceC2 p {
+            color: var(--pieceC2Label);
+        }
+    </style>
+
+
+</head>
+
+
+<body>
+    <div>
+        <div id="status" class="row" onclick="test()">
+            <div id="gameStatus" class="col-xs-4 bg-primary">
+                <p>status</p>
+            </div>
+            <div id="gameCount" class="col-xs-8 bg-warning">
+                <div class="col-xs-6 bg-danger">
+
+                    <div class="col-xs-4">
+                        <p>Player 1</p>
+                    </div>
+                    <div class="col-xs-5 bg-primary">
+                        <div class="piece pieceC2">
+                        </div>
+                    </div>
+                    <div class="col-xs-2">
+                        <p>141</p>
+                    </div>
+
+                </div>
+                <div class="col-xs-6 bg-danger">
+
+                    <div class="col-xs-4">
+                        <p>Player 1</p>
+                    </div>
+                    <div class="col-xs-5 bg-primary">
+                        <div class="piece pieceC1">
+                        </div>
+                    </div>
+                    <div class="col-xs-2">
+                        <p>141</p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <div id="wrapper">
+            <div id="game">
+
+                <div id="board" class="container-fluid">
+
+                    <div id="leftSide" class="row">
+
+                        <div class="diceArea">
+
+                            <div class="dice">
+                                <div class="diceContent" onclick="test()">
+                                    <div class="diceRow">
+                                        <div class="diceColum">
+                                            <div class="diceFilled"></div>
+                                        </div>
+                                        <div class="diceColum"></div>
+                                        <div class="diceColum">
+                                            <div class="diceFilled"></div>
+                                        </div>
+                                    </div>
+                                    <div class="diceRow">
+                                        <div class="diceColum"></div>
+                                        <div class="diceColum"></div>
+                                        <div class="diceColum"></div>
+                                    </div>
+                                    <div class="diceRow">
+                                        <div class="diceColum">
+                                            <div class="diceFilled"></div>
+                                        </div>
+                                        <div class="diceColum"></div>
+                                        <div class="diceColum">
+                                            <div class="diceFilled"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dice">
+                                <div class="diceContent">
+                                    <div class="diceRow">
+                                        <div class="diceColum"></div>
+                                        <div class="diceColum"></div>
+                                        <div class="diceColum"></div>
+                                    </div>
+                                    <div class="diceRow">
+                                        <div class="diceColum"></div>
+                                        <div class="diceColum">
+                                            <div class="diceFilled"></div>
+                                        </div>
+                                        <div class="diceColum"></div>
+                                    </div>
+                                    <div class="diceRow">
+                                        <div class="diceColum"></div>
+                                        <div class="diceColum"></div>
+                                        <div class="diceColum"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dice">
+                                <div class="diceContent">
+                                    <div class="diceRow">
+                                        <div class="diceColum">
+                                            <div class="diceFilled"></div>
+                                        </div>
+                                        <div class="diceColum"></div>
+                                        <div class="diceColum"></div>
+                                    </div>
+                                    <div class="diceRow">
+                                        <div class="diceColum"></div>
+                                        <div class="diceColum">
+                                            <div class="diceFilled"></div>
+                                        </div>
+                                        <div class="diceColum"></div>
+                                    </div>
+                                    <div class="diceRow">
+                                        <div class="diceColum"></div>
+                                        <div class="diceColum"></div>
+                                        <div class="diceColum">
+                                            <div class="diceFilled"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dice">
+                                <div class="diceContent">
+                                    <div class="diceRow">
+                                        <div class="diceColum">
+                                            <div class="diceFilled"></div>
+                                        </div>
+                                        <div class="diceColum"></div>
+                                        <div class="diceColum">
+                                            <div class="diceFilled"></div>
+                                        </div>
+                                    </div>
+                                    <div class="diceRow">
+                                        <div class="diceColum"></div>
+                                        <div class="diceColum">
+                                            <div class="diceFilled"></div>
+                                        </div>
+                                        <div class="diceColum"></div>
+                                    </div>
+                                    <div class="diceRow">
+                                        <div class="diceColum">
+                                            <div class="diceFilled"></div>
+                                        </div>
+                                        <div class="diceColum"></div>
+                                        <div class="diceColum">
+                                            <div class="diceFilled"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="blocksUp">
+
+                            <div class="triangle col-xs-2">
+                                <div class="trianglePart triangleLeftUpC2"></div>
+                                <div class="trianglePart triangleRightUpC2"></div>
+                                <div class="pieceContainer" onClick="test()">
+                                    <div class="piece pieceC1">
+                                        <P class="">2</P>
+                                    </div>
+                                    <div class="piece pieceC1">
+                                    </div>
+                                    <div class="piece pieceC1">
+                                    </div>
+                                    <div class="piece pieceC1">
+                                    </div>
+                                    <div class="piece pieceC1">
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="triangle col-xs-2">
+                                <div class="trianglePart triangleLeftUp"></div>
+                                <div class="trianglePart triangleRightUp"></div>
+                                <div class="pieceContainer">
+                                    <div class="piece pieceC2">
+                                        <P class="">2</P>
+                                    </div>
+                                    <div class="piece pieceC2">
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="triangle col-xs-2">
+                                <div class="trianglePart triangleLeftUpC2"></div>
+                                <div class="trianglePart triangleRightUpC2"></div>
+                                <div class="pieceContainer">
+                                    <div class="piece pieceC2">
+                                        <P class="">12</P>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="triangle col-xs-2">
+                                <div class="trianglePart triangleLeftUp"></div>
+                                <div class="trianglePart triangleRightUp"></div>
+                                <div class="pieceContainer">
+                                    <div class="piece pieceC2">
+                                        <P class="">12</P>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="triangle col-xs-2">
+                                <div class="trianglePart triangleLeftUpC2"></div>
+                                <div class="trianglePart triangleRightUpC2"></div>
+                                <div class="pieceContainer">
+                                    <div class="piece pieceC1">
+                                        <P class="">12</P>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="triangle col-xs-2">
+                                <div class="trianglePart triangleLeftUp"></div>
+                                <div class="trianglePart triangleRightUp"></div>
+                                <div class="pieceContainer">
+                                    <div class="piece pieceC1">
+                                        <P class="">12</P>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="blocksDown">
+
+                            <div class="triangle col-xs-2">
+                                <div class="trianglePart triangleLeftDown"></div>
+                                <div class="trianglePart triangleRightDown"></div>
+
+                                <div class="pieceContainer pieceContainerDown">
+                                    <div class="piece pieceC1">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="triangle col-xs-2">
+                                <div class="trianglePart triangleLeftDownC2"></div>
+                                <div class="trianglePart triangleRightDownC2"></div>
+
+                                <div class="pieceContainer pieceContainerDown">
+                                    <div class="piece pieceC1">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="triangle col-xs-2">
+                                <div class="trianglePart triangleLeftDown"></div>
+                                <div class="trianglePart triangleRightDown"></div>
+
+                                <div class="pieceContainer pieceContainerDown">
+                                    <div class="piece pieceC1">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="triangle col-xs-2">
+                                <div class="trianglePart triangleLeftDownC2"></div>
+                                <div class="trianglePart triangleRightDownC2"></div>
+
+                                <div class="pieceContainer pieceContainerDown">
+                                    <div class="piece pieceC2">
+                                        <p>2</p>
+                                    </div>
+                                    <div class="piece pieceC2">
+                                    </div>
+                                    <div class="piece pieceC2">
+                                    </div>
+                                    <div class="piece pieceC2">
+                                    </div>
+                                    <div class="piece pieceC2">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="triangle col-xs-2">
+                                <div class="trianglePart triangleLeftDown"></div>
+                                <div class="trianglePart triangleRightDown"></div>
+
+                                <div class="pieceContainer pieceContainerDown">
+                                    <div class="piece pieceC1">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="triangle col-xs-2">
+                                <div class="trianglePart triangleLeftDownC2"></div>
+                                <div class="trianglePart triangleRightDownC2"></div>
+
+                                <div class="pieceContainer pieceContainerDown">
+                                    <div class="piece pieceC1" onclick="test()">
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <div class="shadowBox"></div>
+
+                    </div>
+
+                    <div id="grayBar" class="row">
+                        <div class="blocksUp">
+                            <div class="pieceContainer pieceContainerDown">
+                                <div class="piece pieceC1">
+                                    <P class="">2</P>
+                                </div>
+                                <div class="piece pieceC1">
+                                </div>
+                                <div class="piece pieceC1">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="blocksDown">
+                            <div class="pieceContainer">
+                                <div class="piece pieceC2">
+                                    <P class="">2</P>
+                                </div>
+                                <div class="piece pieceC2">
+                                </div>
+                                <div class="piece pieceC2">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div id="rightSide" class=" row">
+
+                        <div class="diceArea">
+
+                            <div class="rollButton">
+                                <div class="rollButtonContent" onClick="test()">
+                                    <p>Roll Dice</p>
+                                </div>
+
+                            </div>
+
+                            <div class="dice">
+                                <div class="diceContent">
+                                    <div class="diceRow">
+                                        <div class="diceColum">
+                                            <div class="diceFilled"></div>
+                                        </div>
+                                        <div class="diceColum"></div>
+                                        <div class="diceColum"></div>
+                                    </div>
+                                    <div class="diceRow">
+                                        <div class="diceColum"></div>
+                                        <div class="diceColum"></div>
+                                        <div class="diceColum"></div>
+                                    </div>
+                                    <div class="diceRow">
+                                        <div class="diceColum"></div>
+                                        <div class="diceColum"></div>
+                                        <div class="diceColum">
+                                            <div class="diceFilled"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dice">
+                                <div class="diceContent">
+                                    <div class="diceRow">
+                                        <div class="diceColum">
+                                            <div class="diceFilled"></div>
+                                        </div>
+                                        <div class="diceColum"></div>
+                                        <div class="diceColum">
+                                            <div class="diceFilled"></div>
+                                        </div>
+                                    </div>
+                                    <div class="diceRow">
+                                        <div class="diceColum">
+                                            <div class="diceFilled"></div>
+                                        </div>
+                                        <div class="diceColum"></div>
+                                        <div class="diceColum">
+                                            <div class="diceFilled"></div>
+                                        </div>
+
+                                    </div>
+                                    <div class="diceRow">
+                                        <div class="diceColum">
+                                            <div class="diceFilled"></div>
+                                        </div>
+                                        <div class="diceColum"></div>
+                                        <div class="diceColum">
+                                            <div class="diceFilled"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="blocksUp">
+
+                            <div class="triangle col-xs-2">
+                                <div class="trianglePart triangleLeftUpC2"></div>
+                                <div class="trianglePart triangleRightUpC2"></div>
+                                <div class="pieceContainer">
+                                    <div class="piece pieceC1">
+                                        <P class="">2</P>
+                                    </div>
+                                    <div class="piece pieceC1">
+                                    </div>
+                                    <div class="piece pieceC1">
+                                    </div>
+                                    <div class="piece pieceC1">
+                                    </div>
+                                    <div class="piece pieceC1">
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="triangle col-xs-2">
+                                <div class="trianglePart triangleLeftUp"></div>
+                                <div class="trianglePart triangleRightUp"></div>
+                                <div class="pieceContainer">
+                                    <div class="piece pieceC2">
+                                        <P class="">2</P>
+                                    </div>
+                                    <div class="piece pieceC2">
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="triangle col-xs-2">
+                                <div class="trianglePart triangleLeftUpC2"></div>
+                                <div class="trianglePart triangleRightUpC2"></div>
+                                <div class="pieceContainer">
+                                    <div class="piece pieceC2">
+                                        <P class="">12</P>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="triangle col-xs-2">
+                                <div class="trianglePart triangleLeftUp"></div>
+                                <div class="trianglePart triangleRightUp"></div>
+                                <div class="pieceContainer">
+                                    <div class="piece pieceC2">
+                                        <P class="">12</P>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="triangle col-xs-2">
+                                <div class="trianglePart triangleLeftUpC2"></div>
+                                <div class="trianglePart triangleRightUpC2"></div>
+                                <div class="pieceContainer">
+                                    <div class="piece pieceC1">
+                                        <P class="">12</P>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="triangle col-xs-2">
+                                <div class="trianglePart triangleLeftUp"></div>
+                                <div class="trianglePart triangleRightUp"></div>
+                                <div class="pieceContainer">
+                                    <div class="piece pieceC1">
+                                        <P class="">12</P>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="blocksDown">
+
+                            <div class="triangle col-xs-2">
+                                <div class="trianglePart triangleLeftDown"></div>
+                                <div class="trianglePart triangleRightDown"></div>
+
+                                <div class="pieceContainer pieceContainerDown">
+                                    <div class="piece pieceC1">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="triangle col-xs-2">
+                                <div class="trianglePart triangleLeftDownC2"></div>
+                                <div class="trianglePart triangleRightDownC2"></div>
+
+                                <div class="pieceContainer pieceContainerDown">
+                                    <div class="piece pieceC1">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="triangle col-xs-2">
+                                <div class="trianglePart triangleLeftDown"></div>
+                                <div class="trianglePart triangleRightDown"></div>
+
+                                <div class="pieceContainer pieceContainerDown">
+                                    <div class="piece pieceC1">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="triangle col-xs-2">
+                                <div class="trianglePart triangleLeftDownC2"></div>
+                                <div class="trianglePart triangleRightDownC2"></div>
+
+                                <div class="pieceContainer pieceContainerDown">
+                                    <div class="piece pieceC2">
+                                        <p>2</p>
+                                    </div>
+                                    <div class="piece pieceC2">
+                                    </div>
+                                    <div class="piece pieceC2">
+                                    </div>
+                                    <div class="piece pieceC2">
+                                    </div>
+                                    <div class="piece pieceC2">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="triangle col-xs-2">
+                                <div class="trianglePart triangleLeftDown"></div>
+                                <div class="trianglePart triangleRightDown"></div>
+
+                                <div class="pieceContainer pieceContainerDown">
+                                    <div class="piece pieceC1">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="triangle col-xs-2">
+                                <div class="trianglePart triangleLeftDownC2"></div>
+                                <div class="trianglePart triangleRightDownC2"></div>
+
+                                <div class="pieceContainer pieceContainerDown">
+                                    <div class="piece pieceC1">
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <div class="shadowBox"></div>
+                    </div>
+
+                    <div id="outSide" class="row">
+
+                        <div class="undoButton">
+                            <button class="btn btn-warning">Undo</button>
+                        </div>
+
+                        <div class="blocksUp">
+
+                            <div class="shadowBox"></div>
+                            <div class="pieceContainer">
+                                <div class="pieceFlat pieceFlatC1">
+                                </div>
+                                <div class="pieceFlat pieceFlatC1">
+                                </div>
+                                <div class="pieceFlat pieceFlatC1">
+                                </div>
+                                <div class="pieceFlat pieceFlatC1">
+                                </div>
+                                <div class="pieceFlat pieceFlatC1">
+                                </div>
+                                <div class="pieceFlat pieceFlatC1">
+                                </div>
+                                <div class="pieceFlat pieceFlatC1">
+                                </div>
+                                <div class="pieceFlat pieceFlatC1">
+                                </div>
+                                <div class="pieceFlat pieceFlatC1">
+                                </div>
+                                <div class="pieceFlat pieceFlatC1">
+                                </div>
+                                <div class="pieceFlat pieceFlatC1">
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="blocksDown">
+                            <div class="shadowBox"></div>
+                            <div class="pieceContainer pieceContainerDown">
+                                <div class="pieceFlat pieceFlatC2">
+                                </div>
+                                <div class="pieceFlat pieceFlatC2">
+                                </div>
+                                <div class="pieceFlat pieceFlatC2">
+                                </div>
+                                <div class="pieceFlat pieceFlatC2">
+                                </div>
+                                <div class="pieceFlat pieceFlatC2">
+                                </div>
+                                <div class="pieceFlat pieceFlatC2">
+                                </div>
+                                <div class="pieceFlat pieceFlatC2">
+                                </div>
+                                <div class="pieceFlat pieceFlatC2">
+                                </div>
+                                <div class="pieceFlat pieceFlatC2">
+                                </div>
+                                <div class="pieceFlat pieceFlatC2">
+                                </div>
+                                <div class="pieceFlat pieceFlatC2">
+                                </div>
+                                <div class="pieceFlat pieceFlatC2">
+                                </div>
+                                <div class="pieceFlat pieceFlatC2">
+                                </div>
+                                <div class="pieceFlat pieceFlatC2">
+                                </div>
+                                <div class="pieceFlat pieceFlatC2">
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</body>
+
+
+</html>
