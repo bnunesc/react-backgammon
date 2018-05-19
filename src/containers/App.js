@@ -269,6 +269,7 @@ class App extends Component {
                 });
 
                 if (homeBoard) { //Calculate moves to outside
+                    console.log('Homeboard');
 
                 }
 
