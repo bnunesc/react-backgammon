@@ -5,15 +5,16 @@ import PieceFlat from './PieceFlat/PieceFlat';
 
 class OutSideBar extends PureComponent {
 
-    getFlatPieces = (player, numberOfPieces) => {
+    
+    getFlatCheckers = (player, numberOfCheckers) => {
 
-        const pieces = [];
+        const checkers = [];
 
-        for (let i = 0; i < numberOfPieces; i++) {
-            pieces.push(<PieceFlat player={player} key={'OSBP' + player + 'P' + i} />);
+        for (let i = 0; i < numberOfCheckers; i++) {
+            checkers.push(<PieceFlat player={player} key={'OSBP' + player + 'P' + i} />);
         }
 
-        return pieces
+        return checkers
     }
 
     componentDidUpdate() {
@@ -21,8 +22,18 @@ class OutSideBar extends PureComponent {
     }
 
     render() {
-        const piecesP1 = this.getFlatPieces("1", this.props.pieces.piecesP1);
-        const piecesP2 = this.getFlatPieces("2", this.props.pieces.piecesP2);
+
+        let classReceivableP1 = '';
+        let classReceivableP2 = '';
+        if (this.props.checkers.p1CanReceive) {
+            classReceivableP1 = ' receivable';
+        }
+        if (this.props.checkers.p2CanReceive) {
+            classReceivableP2 = ' receivable';
+        }
+
+        const checkersP1 = this.getFlatCheckers("1", this.props.checkers.checkersP1);
+        const checkersP2 = this.getFlatCheckers("2", this.props.checkers.checkersP2);
 
         let undoButtonclass = 'disabled';
         let undoButtonFunction;
@@ -44,15 +55,19 @@ class OutSideBar extends PureComponent {
 
                 <div className="blocksUp">
                     <div className="shadowBox"></div>
-                    <div className="pieceContainer">
-                        {piecesP1}
+                    <div className={"pieceContainer" + classReceivableP1}
+                        onClick={this.props.checkers.p1CanReceive}
+                    >
+                        {checkersP1}
                     </div>
                 </div>
 
                 <div className="blocksDown">
                     <div className="shadowBox"></div>
-                    <div className="pieceContainer pieceContainerDown">
-                        {piecesP2}
+                    <div className={"pieceContainer pieceContainerDown" + classReceivableP2}
+                        onClick={this.props.checkers.p2CanReceive}
+                    >
+                        {checkersP2}
                     </div>
                 </div>
             </div>
