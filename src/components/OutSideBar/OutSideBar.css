@@ -1,3 +1,7 @@
+:root {
+  --outSidereceiveColor: rgba(62, 187, 37, 0.508);
+}
+
 #outSide {
     position: absolute;
     top: 2%;
@@ -6,6 +10,11 @@
     width: 4.5%;
     display: block;
     background-image: url(../../assets/fabric.jpg);
+  }
+
+  #outSide .receivable {
+    background-color: var(--outSidereceiveColor);
+    cursor: pointer;
   }
   
   .undoButton {

@@ -13,10 +13,10 @@ const getPieces = (player, numberOfPieces, callerIdKey, canMove) => {
         for (let i = 0; i < count; i++) {
             //highlight last piece if it can move
             if (canMove && i === count -1 ){
-                pieces.push(<Piece player={player} count="1" key={callerIdKey + player + 'P' + i} canMove="1"/>);
+                pieces.push(<Piece player={player} count={1} key={callerIdKey + player + 'P' + i} canMove={1}/>);
             }
             else {
-                pieces.push(<Piece player={player} count="1" key={callerIdKey + player + 'P' + i} />);
+                pieces.push(<Piece player={player} count={1} key={callerIdKey + player + 'P' + i} />);
             }                            
         }
 

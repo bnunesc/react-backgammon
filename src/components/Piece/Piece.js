@@ -11,7 +11,7 @@ const piece = (props) => {
         classes += ' pieceP2'
     }
 
-    if (props.canMove === "1") {
+    if (props.canMove === 1) {
         classes += ' canMove'
     }
 

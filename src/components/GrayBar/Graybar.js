@@ -11,8 +11,8 @@ class GrayBar extends PureComponent {
 
     render() {
 
-       const piecesP1 = getPieces(1, this.props.pieces.piecesP1,"Graybar", false);
-       const piecesP2 = getPieces(2, this.props.pieces.piecesP2, "Graybar", false);
+       const piecesP1 = getPieces(1, this.props.checkers.checkersP1,"Graybar", false);
+       const piecesP2 = getPieces(2, this.props.checkers.checkersP2, "Graybar", false);
        
 
         return (
