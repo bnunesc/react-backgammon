@@ -27,20 +27,6 @@ class App extends Component {
         movingChecker: false,
     }
 
-
-    //Receive the status and update the state
-    // updateGame = (game) => {
-    //     const gameStatus        = game.gameStatus !== undefined         ? game.gameStatus       : this.state.gameStatus;
-    //     const history           = game.history !== undefined            ? game.history          : this.state.history;
-    //     const currentPosition   = game.currentPosition !== undefined    ? game.currentPosition  : this.state.currentPosition;
-    //     const p1IsNext          = game.p1IsNext !== undefined           ? game.p1IsNext         : this.state.p1IsNext;
-    //     const dice              = game.dice !== undefined               ? game.dice             : this.state.dice;
-    //     const points            = game.points !== undefined             ? game.points           : this.state.points;
-    //     const grayBar           = game.grayBar !== undefined            ? game.grayBar          : this.state.grayBar;
-    //     const outSideBar        = game.outSideBar !== undefined         ? game.outSideBar       : this.state.outSideBar;
-    //     const movingPiece       = game.movingPiece !== undefined        ? game.movingPiece      : this.state.movingPiece;
-    // };
-
     //set up new game
     setupNewGameHandler = (player) => {
         const gameStatus = 30;
@@ -151,6 +137,8 @@ class App extends Component {
         if (dice[0] === dice[1]) {
             dice[2] = dice[3] = dice[0];
         }
+
+        console.log("Rolled dice: " + dice);
 
         //Get moves and status
         const moves = this.calculateCanMove(
@@ -363,7 +351,7 @@ class App extends Component {
 
             this.state.dice.map((die) => {
 
-                const destination = this.getPlayer(p1IsNext) === 1 ? checker + die : checker - die;
+                const destination = p1IsNext ? checker + die : checker - die;
                 if (destination < 24 && destination >= 0) {
 
                     if (points[destination].player === this.getPlayer(p1IsNext) ||
@@ -420,10 +408,9 @@ class App extends Component {
 
         //get the moving piece or graybar (-1 or 24)
         let movingChecker = this.getMovingChecker(p1IsNext);
-        console.log("to outside: " + movingChecker);
 
         //get destination
-        const destination = this.getPlayer(p1IsNext) === 1 ? movingChecker + die : movingChecker - die;
+        const destination = p1IsNext ? movingChecker + die : movingChecker - die;
         console.log("Moving piece to " + destination);
 
         //Remove the piece from orign and clean point if it has no checker
@@ -481,7 +468,7 @@ class App extends Component {
         //remove die from dice
         const diceIndex = dice.findIndex((dieNumber) => dieNumber === die);
         dice.splice(diceIndex, 1);
-        console.log("Played die" + die);
+        console.log("Played die " + die);
 
         //Change player if no die
         if (dice.length === 0) {
@@ -529,7 +516,7 @@ class App extends Component {
         if (this.state.movingChecker !== false) { //Moving checker is assigned
             movingChecker = this.state.movingChecker;
         } else { //Checker coming from grayBar
-            if (this.getPlayer(p1IsNext) === 1) {
+            if (p1IsNext) {
                 movingChecker = -1;
             }
             else {

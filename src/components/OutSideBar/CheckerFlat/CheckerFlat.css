@@ -1,0 +1,39 @@
+:root {
+  --checkerFlatP1: rgb(211, 211, 211);
+  --checkerFlatP1Detail: rgb(88, 88, 88);
+  --checkerFlatP2: rgb(53, 53, 53);
+  --checkerFlatP2Detail: rgb(161, 161, 161);
+}
+
+div.checkerFlat {
+  position: relative;
+  width: 100%;
+  margin: 0px auto;
+  overflow: hidden;
+  border-radius: 15% 15% 50% 50%;
+  box-shadow: -2px -2px 5px 2px rgba(0, 0, 0, 0.5) inset, 2px 2px 5px 3px rgba(255, 255, 255, 0.3) inset;
+}
+
+.pieceContainerDown div.checkerFlat {
+  border-radius: 50% 50% 15% 15%;
+}
+
+div.checkerFlat:before {
+  content: "";
+  padding-top: 36%;
+  display: block;
+}
+
+div.checkerFlatP1 {
+  background: linear-gradient(to bottom, var(--checkerFlatP1) 0%, var(--checkerFlatP1) 65%, var(--checkerFlatP1Detail) 70%, var(--checkerFlatP1) 75%, var(--checkerFlatP1) 80%, var(--checkerFlatP1Detail) 85%, var(--checkerFlatP1) 90%, var(--checkerFlatP1) 100%);
+}
+
+div.checkerFlatP2 {
+  background: linear-gradient(to top, var(--checkerFlatP2) 0%, var(--checkerFlatP2) 65%, var(--checkerFlatP2Detail) 70%, var(--checkerFlatP2) 75%, var(--checkerFlatP2) 80%, var(--checkerFlatP2Detail) 85%, var(--checkerFlatP2) 90%, var(--checkerFlatP2) 100%);
+}
+
+@media screen and (max-width: 800px) {
+  div.checkerFlat {
+    box-shadow: -1px -1px 4px 1px rgba(0, 0, 0, 0.5) inset, 1px 1px 1px 1px rgba(255, 255, 255, 0.0) inset;
+  }
+}

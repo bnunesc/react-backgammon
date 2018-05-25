@@ -1,24 +1,20 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import './OutSideBar.css';
 
-import PieceFlat from './PieceFlat/PieceFlat';
+import CheckerFlat from './CheckerFlat/CheckerFlat';
 
-class OutSideBar extends PureComponent {
+class OutSideBar extends Component {
 
-    
+
     getFlatCheckers = (player, numberOfCheckers) => {
 
         const checkers = [];
 
         for (let i = 0; i < numberOfCheckers; i++) {
-            checkers.push(<PieceFlat player={player} key={'OSBP' + player + 'P' + i} />);
+            checkers.push(<CheckerFlat player={player} key={'OSBP' + player + 'C' + i} />);
         }
 
         return checkers
-    }
-
-    componentDidUpdate() {
-        console.log("[OUTSIDEBAR UPDATE] - Inside Did Update");
     }
 
     render() {
@@ -38,7 +34,6 @@ class OutSideBar extends PureComponent {
         let undoButtonclass = 'disabled';
         let undoButtonFunction;
         if (this.props.currentPosition) {
-            console.log("hascurrent Position");
             undoButtonclass = '';
             undoButtonFunction = this.props.undoHandler;
         }
