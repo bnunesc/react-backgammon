@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './Graybar.css';
 
-import getPieces from '../getPieces/getPieces';
+import getCheckers from '../getCheckers/getCheckers';
 
 class GrayBar extends Component {
 
@@ -23,19 +23,19 @@ class GrayBar extends Component {
 
     render() {
 
-        const checkersP1 = getPieces(1, this.props.checkers.checkersP1, "Graybar", false);
-        const checkersP2 = getPieces(2, this.props.checkers.checkersP2, "Graybar", false);
+        const checkersP1 = getCheckers(1, this.props.checkers.checkersP1, "Graybar", false);
+        const checkersP2 = getCheckers(2, this.props.checkers.checkersP2, "Graybar", false);
 
         return (
             <div id="grayBar" className="row">
                 <div className="blocksUp">
-                    <div className="pieceContainer pieceContainerDown">
+                    <div className="pointContainer pointContainerDown">
                         {checkersP1}
                     </div>
 
                 </div>
                 <div className="blocksDown">
-                    <div className="pieceContainer">
+                    <div className="pointContainer">
                         {checkersP2}
                     </div>
 

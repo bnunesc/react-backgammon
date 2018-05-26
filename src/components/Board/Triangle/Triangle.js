@@ -6,7 +6,7 @@ const Triangle = (props) => {
     let classOrientation = '';
     let classColor = '';
     let classReceivable = '';
-    let pieceContainerClasses = '';
+    let pointContainerClasses = '';
 
 
     if (props.position === "top") {
@@ -14,7 +14,7 @@ const Triangle = (props) => {
     }
     else {
         classOrientation = "Down";
-        pieceContainerClasses = " pieceContainerDown";
+        pointContainerClasses = " pointContainerDown";
     }
 
     if (props.color !== "1") {
@@ -24,13 +24,13 @@ const Triangle = (props) => {
     let action = null;
     if (props.canReceive) {
         action = props.canReceive;
-        pieceContainerClasses += ' containerClickable';
+        pointContainerClasses += ' containerClickable';
         classReceivable = 'Receivable';
         classColor = '';
     }
     if (props.canMove) {
         action = props.canMove;
-        pieceContainerClasses += ' containerClickable';
+        pointContainerClasses += ' containerClickable';
     }
 
 
@@ -39,7 +39,7 @@ const Triangle = (props) => {
         <div className="triangle col-xs-2 " >
             <div className={"trianglePart triangleLeft" + classOrientation + classColor + classReceivable}></div>
             <div className={"trianglePart triangleRight" + classOrientation + classColor + classReceivable}></div>
-            <div className={"pieceContainer " + pieceContainerClasses} onClick={action}>
+            <div className={"pointContainer " + pointContainerClasses} onClick={action}>
                 {props.children}
             </div>
         </div>

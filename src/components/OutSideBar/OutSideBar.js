@@ -50,7 +50,7 @@ class OutSideBar extends Component {
 
                 <div className="blocksUp">
                     <div className="shadowBox"></div>
-                    <div className={"pieceContainer" + classReceivableP1}
+                    <div className={"pointContainer" + classReceivableP1}
                         onClick={this.props.checkers.p1CanReceive}
                     >
                         {checkersP1}
@@ -59,7 +59,7 @@ class OutSideBar extends Component {
 
                 <div className="blocksDown">
                     <div className="shadowBox"></div>
-                    <div className={"pieceContainer pieceContainerDown" + classReceivableP2}
+                    <div className={"pointContainer pointContainerDown" + classReceivableP2}
                         onClick={this.props.checkers.p2CanReceive}
                     >
                         {checkersP2}

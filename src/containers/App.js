@@ -4,13 +4,7 @@ import './App.css';
 import Graybar from '../components/GrayBar/Graybar';
 import OutSideBar from '../components/OutSideBar/OutSideBar';
 import Board from '../components/Board/Board';
-
-//temporary
-
-import Piece from '../components/Piece/Piece';
-
-
-//end temporary
+import Status from '../components/Status/Status';
 
 class App extends Component {
 
@@ -76,7 +70,6 @@ class App extends Component {
             outSideBar: outSideBar,
             movingChecker: movingChecker,
         });
-
     }
 
     //Set new history
@@ -189,7 +182,7 @@ class App extends Component {
             gameStatus = 40;
         }
         else {
-            //check if there is piece on gray Bar
+            //check if there is checker on gray Bar
             if ((p1IsNext && grayBar.checkersP1) ||
                 (!p1IsNext && grayBar.checkersP2)) {
 
@@ -197,7 +190,7 @@ class App extends Component {
                     const destination = p1IsNext ? die - 1 : 24 - die;
                     if (points[destination].player === this.getPlayer(p1IsNext) ||
                         points[destination].checkers < 2) {
-                        newPoints[destination].canReceive = this.receivePieceHandler.bind(this, die);
+                        newPoints[destination].canReceive = this.receiveCheckerHandler.bind(this, die);
                         gameStatus = 31; //Play from graybar
                     }
                     return null;
@@ -241,7 +234,7 @@ class App extends Component {
                     }
 
                     if (canMove) {
-                        newPoints[index].canMove = this.movePieceHandler.bind(this, index);
+                        newPoints[index].canMove = this.moveCheckerHandler.bind(this, index);
                     }
                 }
 
@@ -302,28 +295,27 @@ class App extends Component {
 
             if (!canBearOff) {
 
-
                 const highDie = [...dice].sort().reverse()[0]; //Get the highest die
-                let pieceBehind = false;//Check if there is piece behind the checker
+                let checkerBehind = false;//Check if there is checker behind the moving checker
 
                 if ((p1IsNext && (checker + highDie) > 24) || (!p1IsNext && (checker - highDie) < -1)) {
 
                     if (p1IsNext) {
                         for (let i = 18; i < checker; i++) {
                             if (points[i].player && points[i].player === this.getPlayer(p1IsNext)) {
-                                pieceBehind = true;
+                                checkerBehind = true;
                             }
                         }
                     } else {
                         for (let i = 5; i > checker; i--) {
                             if (points[i].player && points[i].player === this.getPlayer(p1IsNext)) {
-                                pieceBehind = true;
+                                checkerBehind = true;
                             }
                         }
                     }
 
-                    //If there is no piece behind, it can bear off
-                    if (!pieceBehind) {
+                    //If there is no checker behind, it can bear off
+                    if (!checkerBehind) {
                         canBearOff = highDie;
                     }
                 }
@@ -333,7 +325,7 @@ class App extends Component {
         return canBearOff;
     }
 
-    movePieceHandler = (checker) => {
+    moveCheckerHandler = (checker) => {
 
         let gameStatus = 30; //playing
         const p1IsNext = this.state.p1IsNext;
@@ -342,12 +334,12 @@ class App extends Component {
         //get points without actions
         let points = this.getPointsWithoutActions(this.state.points);
 
-        //set or unset the moving piece
+        //set or unset the moving checker
         const movingChecker = checker !== this.state.movingChecker ? checker : false;
 
         if (movingChecker !== false) {
-            //add action to the moving piece. This uncheck the moving piece
-            points[checker].canMove = this.movePieceHandler.bind(this, checker);
+            //add action to the moving checker. This uncheck the moving checker
+            points[checker].canMove = this.moveCheckerHandler.bind(this, checker);
 
             this.state.dice.map((die) => {
 
@@ -356,7 +348,7 @@ class App extends Component {
 
                     if (points[destination].player === this.getPlayer(p1IsNext) ||
                         points[destination].checkers < 2) {
-                        points[destination] = { ...points[destination], canReceive: this.receivePieceHandler.bind(this, die) }
+                        points[destination] = { ...points[destination], canReceive: this.receiveCheckerHandler.bind(this, die) }
                     }
                 }
 
@@ -371,9 +363,9 @@ class App extends Component {
                 if (die) {
 
                     if (p1IsNext) {
-                        outSideBar.p1CanReceive = this.receivePieceHandler.bind(this, die);
+                        outSideBar.p1CanReceive = this.receiveCheckerHandler.bind(this, die);
                     } else {
-                        outSideBar.p2CanReceive = this.receivePieceHandler.bind(this, die);
+                        outSideBar.p2CanReceive = this.receiveCheckerHandler.bind(this, die);
                     }
                     gameStatus = 32; //Bearing off
                 }
@@ -396,7 +388,7 @@ class App extends Component {
 
     }
 
-    receivePieceHandler = (die) => {
+    receiveCheckerHandler = (die) => {
         const grayBar = { ...this.state.grayBar };
         const outSideBar = this.getOutSideBarWithoutActions(this.state.outSideBar);
         const dice = [...this.state.dice];
@@ -406,14 +398,14 @@ class App extends Component {
         //get points without actions
         let points = this.getPointsWithoutActions(this.state.points);
 
-        //get the moving piece or graybar (-1 or 24)
+        //get the moving checker or graybar (-1 or 24)
         let movingChecker = this.getMovingChecker(p1IsNext);
 
         //get destination
         const destination = p1IsNext ? movingChecker + die : movingChecker - die;
-        console.log("Moving piece to " + destination);
+        console.log("Moving checker to " + destination);
 
-        //Remove the piece from orign and clean point if it has no checker
+        //Remove the checker from orign and clean point if it has no checker
         if (movingChecker >= 0 && movingChecker <= 23) {
             points[movingChecker].checkers--;
 
@@ -432,12 +424,12 @@ class App extends Component {
             }
         }
 
-        //Moving piece inside the board
+        //Moving checker inside the board
         if (destination <= 23 && destination >= 0) {
             if (points[destination].player === this.getPlayer(p1IsNext)
                 || points[destination].player === false) {
 
-                //Add piece to destination
+                //Add checker to destination
                 points[destination].checkers++;
 
             }
@@ -462,7 +454,7 @@ class App extends Component {
             }
         }
 
-        //Moving piece now is false
+        //Moving checker now is false
         movingChecker = false;
 
         //remove die from dice
@@ -581,42 +573,10 @@ class App extends Component {
         return (
             <div className="App">
                 <div>
-                    <div id="status" className="row">
-                        <div id="gameStatus" className="col-xs-4 bg-primary">
-                            <p>status</p>
-                            <button onClick={this.setupNewGameHandler.bind(this, 1)}>New Game</button>
-                        </div>
-                        <div id="gameCount" className="col-xs-8 bg-warning">
-                            <div className="col-xs-6 bg-danger">
-
-                                <div className="col-xs-4">
-                                    <p>Player 1</p>
-                                </div>
-                                <div className="col-xs-5 bg-primary">
-                                    <Piece player={1} count={1} />
-                                </div>
-                                <div className="col-xs-2">
-                                    <p>141</p>
-                                </div>
-
-                            </div>
-                            <div className="col-xs-6 bg-danger">
-
-                                <div className="col-xs-4">
-                                    <p>Player 1</p>
-                                </div>
-                                <div className="col-xs-5 bg-primary">
-                                    <Piece player={2} count={1} />
-                                </div>
-                                <div className="col-xs-2">
-                                    <p>141</p>
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
                     <div id="wrapper">
+                        <Status 
+                            newGameHandler={this.setupNewGameHandler}
+                        />
                         <div id="game">
 
                             <Board
