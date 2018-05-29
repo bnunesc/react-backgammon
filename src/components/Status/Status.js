@@ -40,12 +40,12 @@ const Status = (props) => {
     return (
         <div id="status">
             <div id="gameLogo">
-                <p className="status-title" >BackGammon</p>
+                <p className="status-title" >Backgammon</p>
             </div>
             <div id="game-score">
                 <div className="player-score-container">
                     <div className="player-score-name">
-                        <p>Bruno Nunes</p>
+                        <p>{props.players.p1}</p>
                     </div>
                     <div className="player-score-checker">
                         <Checker player={1} count={1} />
@@ -56,7 +56,7 @@ const Status = (props) => {
                 </div>
                 <div className="player-score-container">
                     <div className="player-score-name">
-                        <p>Janice Ho</p>
+                        <p>{props.players.p2}</p>
                     </div>
                     <div className="player-score-checker">
                         <Checker player={2} count={1} />

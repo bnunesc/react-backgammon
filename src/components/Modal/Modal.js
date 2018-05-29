@@ -8,10 +8,10 @@ const Modal = (props) => {
     let message = null;
 
     if (props.gameStatus === 60) {
-        message = "Player 1 wins";
+        message = props.players.p1 + " wins!";
     }
     if (props.gameStatus === 70) {
-        message = "Player 2 wins";
+        message = props.players.p2 + " wins!";
     }
 
     if (message) {
@@ -19,14 +19,15 @@ const Modal = (props) => {
     }
 
     return (
-        <div id="modal" class={disabled}>
+        <div id="modal" className={disabled}>
             <div id="modal-Box">
 
                 <div id="modal-content">
                     <div id="modal-header">
-                        <p>Game Over</p>
+                        
                     </div>
                     <div id="modal-body">
+                        <img src="./assets/congratulation.png" alt="congratulation" />
                         <p>{message}</p>
                     </div>
                     <div id="modal-footer">

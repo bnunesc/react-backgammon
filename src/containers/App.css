@@ -1,4 +1,4 @@
-#wrapper {
+#App {
   position: relative;
   width: 100%;
   min-width: 500px;
@@ -57,5 +57,3 @@
 .pointContainerDown {
   flex-flow: column-reverse;
 }
-
-

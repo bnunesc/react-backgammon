@@ -12,11 +12,12 @@
 }
 
 #modal-content {
-    margin: auto;
+    margin: 5% auto;
     width: 50%;
-    background-color: rgb(194, 194, 194);
+    background-color: rgb(255, 255, 255);
     padding: 1%;
     box-shadow: 15px 15px 15px 15px rgba(0, 0, 0, 0.644);
+    border-radius: 4%;
 }
 
 #modal-header {
@@ -24,9 +25,14 @@
 }
 
 #modal-body {
-    margin: 15% 5%;
+    margin: 10% 5%;
     text-align: center;
     font-size: 5vw;
+}
+
+#modal-body img{
+    width: 100%;
+    margin: 0;
 }
 
 #modal-footer {

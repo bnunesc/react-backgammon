@@ -8,9 +8,16 @@ const board = (props) => {
 
     let leftDiceArea = null;
     let rigthDiceArea = null;
-    if (props.gameStatus >= 20 && props.gameStatus <= 50) {
-        leftDiceArea = props.p1IsNext ? <DiceArea dice={props.dice} clicked={props.rollDice} gameStatus={props.gameStatus} noMove={props.noMove} /> : '';
-        rigthDiceArea = props.p1IsNext ? '' : <DiceArea dice={props.dice} clicked={props.rollDice} gameStatus={props.gameStatus} noMove={props.noMove} />;
+    if (props.gameStatus > 10 && props.gameStatus <= 59) {
+        leftDiceArea = props.p1IsNext ? <DiceArea dice={props.dice} clicked={props.rollDice} gameStatus={props.gameStatus}/> : '';
+        rigthDiceArea = props.p1IsNext ? '' : <DiceArea dice={props.dice} clicked={props.rollDice} gameStatus={props.gameStatus} />;
+        if (props.gameStatus === 50 ) { //No moves available
+            if (props.p1IsNext) {
+                rigthDiceArea = <DiceArea dice={[0]} clicked={props.rollDice} gameStatus={51}/>; //Status 51 creates a escapes the no moves available button
+            } else {
+                leftDiceArea = <DiceArea dice={[0]} clicked={props.rollDice} gameStatus={51}/>; //Status 51 creates a escapes the no moves available button
+            }
+        }
     }
 
 

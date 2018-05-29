@@ -17,7 +17,7 @@ const diceArea = (props) => {
     
     let  noMove = null;
     if (props.gameStatus === 50){
-        noMove = <RollButton label="No Moves available" clicked={props.noMove} />;
+        noMove = <RollButton label="No Moves available" />;
     }
 
     return (

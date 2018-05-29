@@ -20,11 +20,12 @@ class App extends Component {
         grayBar: { checkersP1: 0, checkersP2: 0 },
         outSideBar: { checkersP1: 15, checkersP2: 15 },
         movingChecker: false,
+        players: { p1: 'Bruno', p2: 'Janice' }
     }
 
     //set up new game
     setupNewGameHandler = (player) => {
-        const gameStatus = 30;
+        const gameStatus = 11; //New game
         const history = [];
         const currentPosition = 0
         const p1IsNext = player === 1 ? true : false;
@@ -37,27 +38,29 @@ class App extends Component {
         history.push(this.setHistory(p1IsNext, dice, points, grayBar, outSideBar));
 
         //set points
-        points[0] = { player: 1, checkers: 2 };
-        points[11] = { player: 1, checkers: 5 };
-        points[16] = { player: 1, checkers: 3 };
-        points[18] = { player: 1, checkers: 5 };
+        // points[0] = { player: 1, checkers: 2 };
+        // points[11] = { player: 1, checkers: 5 };
+        // points[16] = { player: 1, checkers: 3 };
+        // points[18] = { player: 1, checkers: 5 };
 
-        points[23] = { player: 2, checkers: 2 };
-        points[12] = { player: 2, checkers: 5 };
-        points[7] = { player: 2, checkers: 3 };
-        points[5] = { player: 2, checkers: 5 };
+        // points[23] = { player: 2, checkers: 2 };
+        // points[12] = { player: 2, checkers: 5 };
+        // points[7] = { player: 2, checkers: 3 };
+        // points[5] = { player: 2, checkers: 5 };
 
         //Temporary
         // Delete
-        // points[20] = { player: 1, checkers: 2 };
-        // points[21] = { player: 1, checkers: 5 };
-        // points[23] = { player: 1, checkers: 3 };
-        // points[18] = { player: 1, checkers: 5 };
+        points[20] = { player: 1, checkers: 2 };
+        points[21] = { player: 1, checkers: 5 };
+        points[23] = { player: 1, checkers: 3 };
+        //        points[18] = { player: 1, checkers: 5 };
+        grayBar.checkersP1 = 5;
 
-        // points[2] = { player: 2, checkers: 2 };
-        // points[3] = { player: 2, checkers: 5 };
-        // points[1] = { player: 2, checkers: 3 };
-        // points[5] = { player: 2, checkers: 5 };
+        points[2] = { player: 2, checkers: 2 };
+        points[3] = { player: 2, checkers: 5 };
+        points[1] = { player: 2, checkers: 3 };
+        points[5] = { player: 2, checkers: 3 };
+        points[4] = { player: 2, checkers: 2 };
         //Finish Delete
 
         this.setState({
@@ -89,40 +92,42 @@ class App extends Component {
         return history;
     }
 
+    //Deprecated
     //No moves available handler
-    noMoveHandler = () => {
+    // noMoveHandler = () => {
 
-        //Dice with 0
-        const dice = [0];
-        const p1IsNext = !this.state.p1IsNext;
-        const points = this.getPointsWithoutActions(this.state.points);
-        const gameStatus = 40;
+    //     //Dice with 0
+    //     const dice = [0];
+    //     const p1IsNext = !this.state.p1IsNext;
+    //     const points = this.getPointsWithoutActions(this.state.points);
+    //     const gameStatus = 40; //no dice to play
 
-        const currentPosition = this.state.currentPosition + 1;
-        const history = [...this.state.history];
-        history.push(
-            this.setHistory(
-                p1IsNext,
-                dice,
-                points,
-                this.state.grayBar,
-                this.state.outSideBar,
-            )
-        );
+    //     const currentPosition = this.state.currentPosition + 1;
+    //     const history = [...this.state.history];
+    //     history.push(
+    //         this.setHistory(
+    //             p1IsNext,
+    //             dice,
+    //             points,
+    //             this.state.grayBar,
+    //             this.state.outSideBar,
+    //         )
+    //     );
 
-        this.setState({
-            gameStatus: gameStatus,
-            history: history,
-            currentPosition: currentPosition,
-            p1IsNext: p1IsNext,
-            dice: dice,
-            points: points,
-        })
-    }
+    //     this.setState({
+    //         gameStatus: gameStatus,
+    //         history: history,
+    //         currentPosition: currentPosition,
+    //         p1IsNext: p1IsNext,
+    //         dice: dice,
+    //         points: points,
+    //     });
+    // }
 
     //Roll dices
     rollDiceHandler = () => {
 
+        const p1IsNext = this.state.gameStatus === 50 ? !this.state.p1IsNext : this.state.p1IsNext;
         //new dice
         const dice = [];
         //Get two random numbers
@@ -139,7 +144,7 @@ class App extends Component {
         const moves = this.calculateCanMove(
             this.getPointsWithoutActions(this.state.points),
             dice,
-            this.state.p1IsNext,
+            p1IsNext,
             this.state.grayBar
         );
 
@@ -152,7 +157,7 @@ class App extends Component {
         const history = [];
         //Save current state into history
         history.push(this.setHistory(
-            this.state.p1IsNext,
+            p1IsNext,
             dice,
             points,
             this.state.grayBar,
@@ -167,6 +172,7 @@ class App extends Component {
             currentPosition: currentPosition,
             points: points,
             dice: dice,
+            p1IsNext: p1IsNext,
         });
     }
 
@@ -563,6 +569,7 @@ class App extends Component {
     getGameStatus = () => {
         switch (this.state.gameStatus) {
             case 10: return "Not started";
+            case 11: return "New game";
             case 20: return "Roll dice";
             case 30: return "Playing";
             case 31: return "Playing from graybar";
@@ -581,44 +588,45 @@ class App extends Component {
         console.log("Game status is " + this.getGameStatus());
 
         return (
-            <div className="App">
-                <div id="wrapper">
-                    <Status
-                        newGameHandler={this.setupNewGameHandler}
+            <div id="App">
+                <Status
+                    newGameHandler={this.setupNewGameHandler}
+                    points={this.state.points}
+                    grayBar={this.state.grayBar}
+                    players={this.state.players}
+                />
+                <div id="game">
+
+                    <Board
+                        rollDice={this.rollDiceHandler}
+                        dice={this.state.dice}
+//                        noMove={this.noMoveHandler}
                         points={this.state.points}
-                        grayBar={this.state.grayBar}
-                    />
-                    <div id="game">
+                        p1IsNext={this.state.p1IsNext}
+                        gameStatus={this.state.gameStatus}
+                    >
 
-                        <Board
-                            rollDice={this.rollDiceHandler}
-                            dice={this.state.dice}
-                            noMove={this.noMoveHandler}
-                            points={this.state.points}
-                            p1IsNext={this.state.p1IsNext}
-                            gameStatus={this.state.gameStatus}
-                        >
-
-                            <Graybar
-                                checkers={this.state.grayBar}
-                            />
-                            <OutSideBar
-                                checkers={this.state.outSideBar}
-                                currentPosition={this.state.currentPosition}
-                                undoHandler={this.undoHandler}
-                            />
-                        </Board>
-
-                        <Modal
-                            newGameHandler={this.setupNewGameHandler}
-                            gameStatus={this.state.gameStatus}
+                        <Graybar
+                            checkers={this.state.grayBar}
                         />
+                        <OutSideBar
+                            checkers={this.state.outSideBar}
+                            currentPosition={this.state.currentPosition}
+                            undoHandler={this.undoHandler}
+                        />
+                    </Board>
 
-                    </div>
+
 
                 </div>
+                <Modal
+                    newGameHandler={this.setupNewGameHandler}
+                    gameStatus={this.state.gameStatus}
+                    players={this.state.players}
+                />
 
             </div>
+
         );
     }
 }
