@@ -1,0 +1,38 @@
+#modal {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.modal-disabled {
+    display: none;
+}
+
+#modal-content {
+    margin: auto;
+    width: 50%;
+    background-color: rgb(194, 194, 194);
+    padding: 1%;
+    box-shadow: 15px 15px 15px 15px rgba(0, 0, 0, 0.644);
+}
+
+#modal-header {
+    font-size: 3vw;
+}
+
+#modal-body {
+    margin: 15% 5%;
+    text-align: center;
+    font-size: 5vw;
+}
+
+#modal-footer {
+    text-align: right;
+}
+
+#modal-footer button {
+    font-size: 3vw;
+}

@@ -1,7 +1,117 @@
 #status {
     position: absolute;
+    padding-top: 1%;
     top: 0;
     left: 0;
     width: 100%;
-    height: 11%;
+    height: 12%;
+    background-color: rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 0px 5px 2px rgba(255, 255, 255, 0.493) inset,
+    0px 0px 5px 2px rgba(255, 255, 255, 0.493);
+}
+
+@media (min-width: 800px) {
+    #status {
+        box-shadow: 0px 0px 8px 3px rgba(255, 255, 255, 0.493) inset,
+        0px 0px 8px 3px rgba(255, 255, 255, 0.493);
+    }
+}
+
+@media (min-width: 1200px) {
+    #status {
+        box-shadow: 0px 0px 10px 4px rgba(255, 255, 255, 0.493) inset,
+        0px 0px 10px 4px rgba(255, 255, 255, 0.493);
+    }
+}
+
+
+#gameLogo {
+    position: absolute;
+    top: 0px;
+    width: 34%;
+    bottom: 0;
+    left: 1%;
+}
+
+.status-title {
+    text-shadow: 5px 5px 10px rgba(77, 77, 77, 0.829);
+    color: rgba(255, 255, 255, 0.803);
+    font-weight: bold;
+    font-size: 4.5vw;
+}
+
+#game-score {
+    position: absolute;
+    top: 0px;
+    width: 55%;
+    bottom: 0;
+    left: 35%;
+    height: 100%;
+}
+
+.player-score-container {
+    position: relative;
+    top: 20%;
+    width: 50%;
+    display: inline-block;
+    height: 80%;
+}
+
+.player-score-name {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0%;
+    width: 55%;
+    font-size: 2vw;
+    font-weight: bold;
+    color: white;
+    overflow: hidden;
+    align-items: center;
+    display: flex;
+}
+
+.player-score-name p {
+    width: 100%;
+    text-align: right;
+}
+
+.player-score-checker {
+    position: absolute;
+    width: 25%;
+    top: 0;
+    left: 55%;
+}
+
+.player-score {
+    position: absolute;
+    top: 0;
+    left: 80%;
+    bottom: 0;
+    width: 20%;
+    font-size: 2.5vw;
+    font-weight: bold;
+    color: white;
+    overflow: hidden;
+    align-items: center;
+    display: flex;
+}
+
+#game-menu {
+    position: absolute;
+    top: 0px;
+    width: 10%;
+    bottom: 0;
+    left: 90%;
+    height: 100%;
+}
+
+#game-menu button {
+    position: relative;
+    width: 80%;
+    height: 80%;
+    padding: 5%;
+    font-size: 1.62vw;
+    font-weight: bold;
+    margin: 5% 10%;
 }

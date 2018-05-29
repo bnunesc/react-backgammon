@@ -1,17 +1,14 @@
 
 #board {
-    background-image: url(../../assets/wood.jpg);
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
     height: 100%;
 }
 
 #leftSide {
     position: absolute;
     top: 2%;
-    left: 3%;
+    left: 5%;
     bottom: 2%;
-    width: 38.5%;
+    width: 36.5%;
     display: block;
     background-image: url(../../assets/fabric.jpg);
 }
@@ -19,9 +16,9 @@
 #rightSide {
     position: absolute;
     top: 2%;
-    left: 48%;
+    left: 50%;
     bottom: 2%;
-    width: 38.5%;
+    width: 36.5%;
     display: block;
     background-image: url(../../assets/fabric.jpg);
 }

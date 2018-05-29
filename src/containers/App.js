@@ -5,6 +5,7 @@ import Graybar from '../components/GrayBar/Graybar';
 import OutSideBar from '../components/OutSideBar/OutSideBar';
 import Board from '../components/Board/Board';
 import Status from '../components/Status/Status';
+import Modal from '../components/Modal/Modal';
 
 class App extends Component {
 
@@ -47,10 +48,10 @@ class App extends Component {
         points[5] = { player: 2, checkers: 5 };
 
         //Temporary
-        //Delete
+        // Delete
         // points[20] = { player: 1, checkers: 2 };
-        // points[11] = { player: 1, checkers: 5 };
-        // points[16] = { player: 1, checkers: 3 };
+        // points[21] = { player: 1, checkers: 5 };
+        // points[23] = { player: 1, checkers: 3 };
         // points[18] = { player: 1, checkers: 5 };
 
         // points[2] = { player: 2, checkers: 2 };
@@ -70,6 +71,7 @@ class App extends Component {
             outSideBar: outSideBar,
             movingChecker: movingChecker,
         });
+
     }
 
     //Set new history
@@ -477,6 +479,14 @@ class App extends Component {
         const history = [...this.state.history];
         history.push(this.setHistory(p1IsNext, dice, points, grayBar, outSideBar));
 
+        //Check if all checkers are in the outside bar
+        if (outSideBar.checkersP1 === 15) {
+            gameStatus = 60;
+        }
+        if (outSideBar.checkersP2 === 15) {
+            gameStatus = 70;
+        }
+
         this.setState({
             gameStatus: gameStatus,
             history: history,
@@ -572,36 +582,40 @@ class App extends Component {
 
         return (
             <div className="App">
-                <div>
-                    <div id="wrapper">
-                        <Status 
+                <div id="wrapper">
+                    <Status
+                        newGameHandler={this.setupNewGameHandler}
+                        points={this.state.points}
+                        grayBar={this.state.grayBar}
+                    />
+                    <div id="game">
+
+                        <Board
+                            rollDice={this.rollDiceHandler}
+                            dice={this.state.dice}
+                            noMove={this.noMoveHandler}
+                            points={this.state.points}
+                            p1IsNext={this.state.p1IsNext}
+                            gameStatus={this.state.gameStatus}
+                        >
+
+                            <Graybar
+                                checkers={this.state.grayBar}
+                            />
+                            <OutSideBar
+                                checkers={this.state.outSideBar}
+                                currentPosition={this.state.currentPosition}
+                                undoHandler={this.undoHandler}
+                            />
+                        </Board>
+
+                        <Modal
                             newGameHandler={this.setupNewGameHandler}
+                            gameStatus={this.state.gameStatus}
                         />
-                        <div id="game">
-
-                            <Board
-                                rollDice={this.rollDiceHandler}
-                                dice={this.state.dice}
-                                noMove={this.noMoveHandler}
-                                points={this.state.points}
-                                p1IsNext={this.state.p1IsNext}
-                                gameStatus={this.state.gameStatus}
-
-                            >
-
-                                <Graybar
-                                    checkers={this.state.grayBar}
-                                />
-                                <OutSideBar
-                                    checkers={this.state.outSideBar}
-                                    currentPosition={this.state.currentPosition}
-                                    undoHandler={this.undoHandler}
-                                />
-                            </Board>
-
-                        </div>
 
                     </div>
+
                 </div>
 
             </div>

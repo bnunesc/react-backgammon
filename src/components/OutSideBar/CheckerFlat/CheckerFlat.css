@@ -20,7 +20,7 @@ div.checkerFlat {
 
 div.checkerFlat:before {
   content: "";
-  padding-top: 36%;
+  padding-top: 30%;
   display: block;
 }
 
