@@ -5,13 +5,13 @@ import Graybar from '../components/GrayBar/Graybar';
 import OutSideBar from '../components/OutSideBar/OutSideBar';
 import Board from '../components/Board/Board';
 import Status from '../components/Status/Status';
-import Modal from '../components/Modal/Modal';
+import Menu from '../components/Menu/Menu';
 
 class App extends Component {
 
     //Initial state
     state = {
-        gameStatus: 10,
+        gameStatus: 80, //not started
         history: [],
         currentPosition: 0,
         p1IsNext: true,
@@ -20,7 +20,15 @@ class App extends Component {
         grayBar: { checkersP1: 0, checkersP2: 0 },
         outSideBar: { checkersP1: 15, checkersP2: 15 },
         movingChecker: false,
-        players: { p1: 'Player 1', p2: 'Player 2' }
+        players: { p1: 'Player 1', p2: 'Player 2' },
+        showMenu: true,
+    }
+
+    //Toggle menu
+    toggleMenuHandler = () => {
+        this.setState({
+            showMenu: !this.state.showMenu,
+        })
     }
 
     //set up new game
@@ -34,6 +42,7 @@ class App extends Component {
         const grayBar = { checkersP1: 0, checkersP2: 0 };
         const outSideBar = { checkersP1: 0, checkersP2: 0 };
         const movingChecker = false;
+        const showMenu = false;
 
         history.push(this.setHistory(p1IsNext, dice, points, grayBar, outSideBar));
 
@@ -56,11 +65,9 @@ class App extends Component {
         //        points[18] = { player: 1, checkers: 5 };
         grayBar.checkersP1 = 5;
 
-        points[2] = { player: 2, checkers: 2 };
-        points[3] = { player: 2, checkers: 5 };
-        points[1] = { player: 2, checkers: 3 };
-        points[5] = { player: 2, checkers: 3 };
-        points[4] = { player: 2, checkers: 2 };
+        //points[2] = { player: 2, checkers: 3 };
+        points[0] = { player: 2, checkers: 2 };
+        outSideBar.checkersP2 = 13
         //Finish Delete
 
         this.setState({
@@ -73,6 +80,7 @@ class App extends Component {
             grayBar: grayBar,
             outSideBar: outSideBar,
             movingChecker: movingChecker,
+            showMenu: showMenu,
         });
 
     }
@@ -88,7 +96,6 @@ class App extends Component {
             outSideBar: { ...outSideBar },
             gameStatus: gameStatus,
         }
-
         return history;
     }
 
@@ -149,37 +156,31 @@ class App extends Component {
     //Calculate possible moves return an object with points and game status
     calculateCanMove = (points, dice, p1IsNext, grayBar) => {
 
-        console.log("[calculateCanMove] calculating possible moves");
+        console.log("calculating possible moves");
 
         let newPoints = [...points];
-        let gameStatus = 50;
+        let gameStatus = 50; //No moves available
 
         if (!dice[0]) {
-            // No dice to play
-            gameStatus = 40;
+            gameStatus = 40; // No dice to play
         }
         else {
             //check if there is checker on gray Bar
             if ((p1IsNext && grayBar.checkersP1) ||
                 (!p1IsNext && grayBar.checkersP2)) {
 
-                dice.map((die) => {
+                for (let die of dice) {
                     const destination = p1IsNext ? die - 1 : 24 - die;
-                    if (points[destination].player === this.getPlayer(p1IsNext) ||
-                        points[destination].checkers < 2) {
+                    if (points[destination].player === this.getPlayer(p1IsNext) || //point belongs to user
+                        points[destination].checkers < 2) { //point is empty or belongs to other user but with only one checker
                         newPoints[destination].canReceive = this.receiveCheckerHandler.bind(this, die);
-                        gameStatus = 31; //Play from graybar
+                        gameStatus = 31; //Playing from graybar
                     }
-                    return null;
-                });
+                }
             }
             else {
 
                 const inHomeBoard = this.checkHomeBoard(newPoints, p1IsNext);
-
-                if (inHomeBoard) {
-                    console.log('HomeBoard');
-                }
 
                 //get points with actions
                 for (let index = 0; index < points.length; index++) {
@@ -214,13 +215,9 @@ class App extends Component {
                         newPoints[index].canMove = this.moveCheckerHandler.bind(this, index);
                     }
                 }
-
             }
-
         }
-
         return { points: newPoints, gameStatus: gameStatus };
-
     }
 
     //Check if player has all the checkers in the home board
@@ -240,7 +237,7 @@ class App extends Component {
                 homeBoard = false;
             }
             //Player 2
-            if (!p1IsNext && index >= 6
+            else if (!p1IsNext && index >= 6
                 && point.player === 2
             ) {
                 homeBoard = false;
@@ -262,19 +259,19 @@ class App extends Component {
         //Check if it is a player checker
         if (checker >= 0 && checker < 24 && points[checker].player === this.getPlayer(p1IsNext)) {
 
-            dice.map((die) => {
+            for (let die of dice) {
                 //check if the dice have the right number to bear off
                 if ((p1IsNext && (checker + die) === 24) || (!p1IsNext && (checker - die) === -1)) {
                     canBearOff = die;
                 }
-                return null;
-            });
+            }
 
             if (!canBearOff) {
 
                 const highDie = [...dice].sort().reverse()[0]; //Get the highest die
                 let checkerBehind = false;//Check if there is checker behind the moving checker
 
+                //die is more than necessary to bear off
                 if ((p1IsNext && (checker + highDie) > 24) || (!p1IsNext && (checker - highDie) < -1)) {
 
                     if (p1IsNext) {
@@ -297,11 +294,11 @@ class App extends Component {
                     }
                 }
             }
-
         }
         return canBearOff;
     }
 
+    //Set moving checker
     moveCheckerHandler = (checker) => {
 
         let gameStatus = 30; //playing
@@ -316,26 +313,25 @@ class App extends Component {
 
         if (movingChecker !== false) {
             //add action to the moving checker. This uncheck the moving checker
-            points[checker].canMove = this.moveCheckerHandler.bind(this, checker);
+            points[movingChecker].canMove = this.moveCheckerHandler.bind(this, movingChecker);
 
-            this.state.dice.map((die) => {
+            for (let die of this.state.dice) {
 
-                const destination = p1IsNext ? checker + die : checker - die;
+                const destination = p1IsNext ? movingChecker + die : movingChecker - die;
                 if (destination < 24 && destination >= 0) {
-
+                    //Check if destnation can receive the checker
                     if (points[destination].player === this.getPlayer(p1IsNext) ||
                         points[destination].checkers < 2) {
-                        points[destination] = { ...points[destination], canReceive: this.receiveCheckerHandler.bind(this, die) }
+                        points[destination].canReceive = this.receiveCheckerHandler.bind(this, die); //Add can Receive to point
                     }
                 }
-
-                return null;
-            });
+            }
 
             //Bearing off
             if (this.checkHomeBoard(points, p1IsNext) &&
                 ((p1IsNext && movingChecker >= 18) || (!p1IsNext && movingChecker <= 5))) {
 
+                //Get the dice to move
                 let die = this.checkCanBearOff(points, movingChecker, p1IsNext, this.state.dice);
                 if (die) {
 
@@ -348,7 +344,7 @@ class App extends Component {
                 }
             }
 
-            console.log("moving checker: " + movingChecker);
+            console.log("moving checker from point " + (p1IsNext ? movingChecker + 1 : 24 - movingChecker));
         }
         else {
             const moves = this.calculateCanMove(points, this.state.dice, this.state.p1IsNext, this.state.grayBar);
@@ -365,12 +361,14 @@ class App extends Component {
 
     }
 
+    //Receive checker into the point
     receiveCheckerHandler = (die) => {
         const grayBar = { ...this.state.grayBar };
         const outSideBar = this.getOutSideBarWithoutActions(this.state.outSideBar);
         const dice = [...this.state.dice];
         let p1IsNext = this.state.p1IsNext;
         let gameStatus = 30; //playing
+        let showMenu = this.state.showMenu;
 
         //get points without actions
         let points = this.getPointsWithoutActions(this.state.points);
@@ -380,19 +378,24 @@ class App extends Component {
 
         //get destination
         const destination = p1IsNext ? movingChecker + die : movingChecker - die;
-        console.log("Moving checker to " + destination);
+
+        //Logging
+        if (destination > 23 || destination < 0) {
+            console.log('Bearing off Checker');
+        } else {
+            console.log('Moving checker to point ' + (p1IsNext ? destination + 1 : 24 - destination));
+        }
 
         //Remove the checker from orign and clean point if it has no checker
         if (movingChecker >= 0 && movingChecker <= 23) {
             points[movingChecker].checkers--;
 
             if (points[movingChecker].checkers === 0) {
-                points[movingChecker].player = false;
+                points[movingChecker].player = false; //unassign point if there is no checker
             }
 
         }
-        //remove from graybar
-        else {
+        else { //remove from graybar
             if (movingChecker === -1) {//remove p1 from gray bar
                 grayBar.checkersP1--;
             }
@@ -404,14 +407,12 @@ class App extends Component {
         //Moving checker inside the board
         if (destination <= 23 && destination >= 0) {
             if (points[destination].player === this.getPlayer(p1IsNext)
-                || points[destination].player === false) {
+                || points[destination].player === false) { //Point either belongs to player or to nobody
 
                 //Add checker to destination
                 points[destination].checkers++;
-
             }
             else { //Destination has different player.
-
                 //Send to gray bar
                 if (p1IsNext) {
                     grayBar.checkersP2++
@@ -419,11 +420,10 @@ class App extends Component {
                     grayBar.checkersP1++
                 }
             }
-            //Assign destination point to player
+            //Assign destination point to player. In this case destination has only one checker
             points[destination].player = this.getPlayer(p1IsNext);
         }
-        //Bearing off
-        else {
+        else { //Bearing off
             if (p1IsNext) {
                 outSideBar.checkersP1++;
             } else {
@@ -443,12 +443,11 @@ class App extends Component {
         if (dice.length === 0) {
             dice[0] = 0;
             p1IsNext = !p1IsNext;
+        } else { //Get new moves
+            const moves = this.calculateCanMove(points, dice, p1IsNext, grayBar);
+            points = moves.points;
+            gameStatus = moves.gameStatus;
         }
-
-        //Get new moves
-        const moves = this.calculateCanMove(points, dice, p1IsNext, grayBar);
-        points = moves.points;
-        gameStatus = moves.gameStatus;
 
         const currentPosition = this.state.currentPosition + 1;
         const history = [...this.state.history];
@@ -456,10 +455,11 @@ class App extends Component {
 
         //Check if all checkers are in the outside bar
         if (outSideBar.checkersP1 === 15) {
-            gameStatus = 60;
-        }
-        if (outSideBar.checkersP2 === 15) {
-            gameStatus = 70;
+            gameStatus = 60; //Player one wins
+            showMenu = true;
+        } else if (outSideBar.checkersP2 === 15) {
+            gameStatus = 70; //Player two wins
+            showMenu = true;
         }
 
         this.setState({
@@ -472,6 +472,7 @@ class App extends Component {
             grayBar: grayBar,
             outSideBar: outSideBar,
             movingChecker: movingChecker,
+            showMenu: showMenu,
         })
 
     }
@@ -479,7 +480,7 @@ class App extends Component {
     //Return the player number 1 or 2.
     getPlayer = (p1IsNext) => p1IsNext ? 1 : 2;
 
-    //Get pointes without actions. It creates a new object
+    //Get points without actions. It creates a new object
     getPointsWithoutActions = (points) => points.map((point) => {
         return { player: point.player, checkers: point.checkers };
     });
@@ -513,7 +514,7 @@ class App extends Component {
         const outSideBar = { ...history[newPosition].outSideBar };
         const movingChecker = false;
 
-        console.log(p1IsNext);
+        console.log('Undo last move');
 
         const moves = this.calculateCanMove(this.state.history[newPosition].points, dice, p1IsNext, grayBar);
         const points = moves.points;
@@ -535,9 +536,9 @@ class App extends Component {
 
     }
 
+    //Get the game status
     getGameStatus = () => {
         switch (this.state.gameStatus) {
-            case 10: return "Not started";
             case 11: return "New game";
             case 20: return "Roll dice";
             case 30: return "Playing";
@@ -547,19 +548,22 @@ class App extends Component {
             case 50: return "No moves available";
             case 60: return "Player 1 wins";
             case 70: return "Player 2 wins";
-            case 80: return "Ended";
+            case 80: return "Not started";
             default: return this.state.gameStatus;
         }
     }
 
 
-    getModal = () => {
+    getMenu = () => {
 
-        return <Modal
-            newGameHandler={this.setupNewGameHandler}
-            gameStatus={this.state.gameStatus}
-            players={this.state.players}
-        />;
+        if (this.state.showMenu) {
+            return <Menu
+                newGameHandler={this.setupNewGameHandler}
+                toggleMenuHandler={this.toggleMenuHandler}
+                gameStatus={this.state.gameStatus}
+                players={this.state.players}
+            />;
+        }
 
     }
 
@@ -567,12 +571,10 @@ class App extends Component {
 
         console.log("Game status is " + this.getGameStatus());
 
-        const modal = this.getModal();
-
         return (
             <div id="App">
                 <Status
-                    newGameHandler={this.setupNewGameHandler}
+                    toggleMenuHandler={this.toggleMenuHandler}
                     points={this.state.points}
                     grayBar={this.state.grayBar}
                     players={this.state.players}
@@ -582,7 +584,6 @@ class App extends Component {
                     <Board
                         rollDice={this.rollDiceHandler}
                         dice={this.state.dice}
-                        //                        noMove={this.noMoveHandler}
                         points={this.state.points}
                         p1IsNext={this.state.p1IsNext}
                         gameStatus={this.state.gameStatus}
@@ -599,7 +600,7 @@ class App extends Component {
                     </Board>
 
                 </div>
-                {modal}
+                {this.getMenu()}
 
             </div>
 

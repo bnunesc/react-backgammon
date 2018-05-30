@@ -5,10 +5,6 @@ import getCheckers from '../getCheckers/getCheckers';
 
 class GrayBar extends Component {
 
-    componentDidUpdate() {
-        console.log("Garybar updated");
-    }
-
     shouldComponentUpdate(nextProps, nextState) {
 
         let propsChanged = false;

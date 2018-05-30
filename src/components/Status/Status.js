@@ -69,7 +69,7 @@ const Status = (props) => {
             <div id="game-menu">
                 <button
                     className="btn btn-success"
-                    onClick={props.newGameHandler.bind(this, 1)}>New<br />Game</button>
+                    onClick={props.toggleMenuHandler}>Menu</button>
             </div>
 
         </div>
