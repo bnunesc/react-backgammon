@@ -20,7 +20,7 @@ class App extends Component {
         grayBar: { checkersP1: 0, checkersP2: 0 },
         outSideBar: { checkersP1: 15, checkersP2: 15 },
         movingChecker: false,
-        players: { p1: 'Bruno', p2: 'Janice' }
+        players: { p1: 'Player 1', p2: 'Player 2' }
     }
 
     //set up new game
@@ -92,41 +92,10 @@ class App extends Component {
         return history;
     }
 
-    //Deprecated
-    //No moves available handler
-    // noMoveHandler = () => {
-
-    //     //Dice with 0
-    //     const dice = [0];
-    //     const p1IsNext = !this.state.p1IsNext;
-    //     const points = this.getPointsWithoutActions(this.state.points);
-    //     const gameStatus = 40; //no dice to play
-
-    //     const currentPosition = this.state.currentPosition + 1;
-    //     const history = [...this.state.history];
-    //     history.push(
-    //         this.setHistory(
-    //             p1IsNext,
-    //             dice,
-    //             points,
-    //             this.state.grayBar,
-    //             this.state.outSideBar,
-    //         )
-    //     );
-
-    //     this.setState({
-    //         gameStatus: gameStatus,
-    //         history: history,
-    //         currentPosition: currentPosition,
-    //         p1IsNext: p1IsNext,
-    //         dice: dice,
-    //         points: points,
-    //     });
-    // }
-
     //Roll dices
     rollDiceHandler = () => {
 
+        //if gameStatus is 50, that means there is no moves available for the current player
         const p1IsNext = this.state.gameStatus === 50 ? !this.state.p1IsNext : this.state.p1IsNext;
         //new dice
         const dice = [];
@@ -583,9 +552,22 @@ class App extends Component {
         }
     }
 
+
+    getModal = () => {
+
+        return <Modal
+            newGameHandler={this.setupNewGameHandler}
+            gameStatus={this.state.gameStatus}
+            players={this.state.players}
+        />;
+
+    }
+
     render() {
 
         console.log("Game status is " + this.getGameStatus());
+
+        const modal = this.getModal();
 
         return (
             <div id="App">
@@ -600,7 +582,7 @@ class App extends Component {
                     <Board
                         rollDice={this.rollDiceHandler}
                         dice={this.state.dice}
-//                        noMove={this.noMoveHandler}
+                        //                        noMove={this.noMoveHandler}
                         points={this.state.points}
                         p1IsNext={this.state.p1IsNext}
                         gameStatus={this.state.gameStatus}
@@ -616,14 +598,8 @@ class App extends Component {
                         />
                     </Board>
 
-
-
                 </div>
-                <Modal
-                    newGameHandler={this.setupNewGameHandler}
-                    gameStatus={this.state.gameStatus}
-                    players={this.state.players}
-                />
+                {modal}
 
             </div>
 
