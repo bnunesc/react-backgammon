@@ -32,17 +32,18 @@ class App extends Component {
     }
 
     //set up new game
-    setupNewGameHandler = (player) => {
+    setupNewGameHandler = (playerNames, playerStarts) => {
         const gameStatus = 11; //New game
         const history = [];
         const currentPosition = 0
-        const p1IsNext = player === 1 ? true : false;
+        const p1IsNext = playerStarts === 1 ? true : false;
         const dice = [0];
         const points = Array(24).fill({ player: false, checkers: 0 });
         const grayBar = { checkersP1: 0, checkersP2: 0 };
         const outSideBar = { checkersP1: 0, checkersP2: 0 };
         const movingChecker = false;
         const showMenu = false;
+        const players = { p1: playerNames.p1, p2: playerNames.p2};
 
         history.push(this.setHistory(p1IsNext, dice, points, grayBar, outSideBar));
 
@@ -81,6 +82,7 @@ class App extends Component {
             outSideBar: outSideBar,
             movingChecker: movingChecker,
             showMenu: showMenu,
+            players: players,
         });
 
     }
