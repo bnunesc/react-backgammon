@@ -15,7 +15,8 @@ class Menu extends Component {
             footer: content.footer,
             menuWidth: content.width,
             canClose: content.canClose,
-            playerNames: { p1: this.props.players.p1, p2: this.props.players.p2 }
+            playerNames: { p1: this.props.players.p1, p2: this.props.players.p2 },
+            playerStarts: 1,
         }
     }
 
@@ -26,9 +27,6 @@ class Menu extends Component {
 
         //Functions return an object;
         switch (gameStatus) {
-            case 11:
-                content = this.getNewGame(gameStatus, players);
-                break;
             //60 or 70 player won
             case 60:
                 content = this.getWinner(gameStatus, players);
@@ -74,7 +72,7 @@ class Menu extends Component {
         content.footer = this.getRegularFooter();
 
         content.width = 'menu-small';
-        content.canClose = gameStatus !== 80 ? true : false;
+        content.canClose = true;
 
         return content;
     }
@@ -83,101 +81,123 @@ class Menu extends Component {
 
         const alertNewGame = this.props.gameStatus < 60 ? 12 : 11; //12 shows alert
 
-        return <div>
-            <button id="modal-about" className="btn btn-info"
-                onClick={this.toggleAboutHandler.bind(this, true)}>
-                About
-        </button>
+        return <React.Fragment>
+            {this.aboutButton}
 
             <button
                 className="btn btn-success"
                 onClick={this.newGameHandler.bind(this, alertNewGame)}>New Game
         </button>
-        </div>;
+        </React.Fragment>;
     }
 
-    getNewGame = (gameStatus, players) => {
+    getNewGame = (gameStatus, players, playerStarts) => {
         const content = {};
+
+        const p1Starts = playerStarts === 1 ? 'btn-info' : 'btn-default';
+        const p2Starts = playerStarts === 2 ? 'btn-info' : 'btn-default';
+
 
         content.header = <p>New Game</p>;
 
         content.body = <React.Fragment>
+
             <label className="modal-body-t2">Player One: </label>
-            <input type="text"
-                className="modal-body-t2"
-                value={players.p1}
-                onChange={this.changePlayerName.bind(this, 1)}
-            />
-            <br />
-            <label className="modal-body-t2" >Player Two: </label>
-            <input type="text"
-                className="modal-body-t2"
-                value={players.p2}
-                onChange={this.changePlayerName.bind(this, 2)}
-            />
+
+            <div className="input-group">
+                <input type="text"
+                    className="form-control modal-body-t2"
+                    value={players.p1}
+                    onChange={this.changePlayerName.bind(this, 1)}
+                />
+                <div className="input-group-btn">
+                    <button className={'btn ' + p1Starts}
+                        onClick={this.changePlayerStart.bind(this, 1)}
+                    >starts</button>
+                </div>
+            </div>
+            <label className="modal-body-t2">Player Two: </label>
+
+            <div className="input-group">
+                <input type="text"
+                    className="form-control modal-body-t2"
+                    value={players.p2}
+                    onChange={this.changePlayerName.bind(this, 2)}
+                />
+                <div className="input-group-btn">
+                    <button className={'btn ' + p2Starts}
+                        onClick={this.changePlayerStart.bind(this, 2)}
+                    >starts</button>
+                </div>
+            </div>
         </React.Fragment>
 
-        content.footer = <div>
-            <button id="modal-about" className="btn btn-info"
-                onClick={this.toggleAboutHandler.bind(this, true)}>
-                About
-            </button>
+        content.footer = <React.Fragment>
+            {this.aboutButton}
 
             <button
                 className="btn btn-success"
-                onClick={this.props.newGameHandler.bind(this, players, 1)}>New Game
+                onClick={this.props.newGameHandler.bind(this, players, 2)}>New Game
             </button>
-        </div>;
+        </React.Fragment>;
 
-        content.width = 'menu-medium';
+        content.width = 'menu-small';
         content.canClose = gameStatus !== 80 ? true : false;
 
         return content;
+    }
+
+    changePlayerStart = (playerStarts) => {
+
+        const content = this.getNewGame(11, this.state.playerNames, playerStarts);
+
+        this.setState({
+            body: content.body,
+            playerStarts: playerStarts,
+        });
+
     }
 
     changePlayerName = (player, event) => {
 
         const playerNames = { ...this.state.playerNames };
 
-        if (player === 1) {
-            playerNames.p1 = event.target.value;
-        } else {
-            playerNames.p2 = event.target.value;
+        if (event.target.value.length <= 12) {
+            if (player === 1) {
+                playerNames.p1 = event.target.value;
+            } else {
+                playerNames.p2 = event.target.value;
+            }
         }
 
-        const content = this.getContent(11, playerNames);
+        const content = this.getNewGame(11, playerNames, this.state.playerStarts);
 
         this.setState({
             body: content.body,
+            footer: content.footer,
             playerNames: playerNames,
         });
     }
 
     newGameHandler = (newGameStatus) => {
 
-        const content = this.getContent(11, this.state.playerNames);
+        const content = this.getNewGame(11, this.state.playerNames, this.state.playerStarts);
         console.log('Starting a new game');
 
         if (newGameStatus === 12) {
 
             content.body =
                 <React.Fragment>
-                    <p>Are you sure you want to end the current game?</p>
+                    <p className="modal-body-t1">Are you sure you want to end the current game?</p>
                 </React.Fragment>
 
-            content.footer = <div>
-                <button id="modal-about" className="btn btn-info"
-                    onClick={this.toggleAboutHandler.bind(this, true)}>
-                    About
-                    </button>
-
+            content.footer = <React.Fragment>
+                {this.aboutButton}
                 <button
                     className="btn btn-danger"
-                    onClick={this.newGameHandler.bind(this,11)}>New Game
+                    onClick={this.newGameHandler.bind(this, 11)}>New Game
                     </button>
-            </div>;
-
-
+            </React.Fragment>;
         }
 
         this.setState({
@@ -206,7 +226,6 @@ class Menu extends Component {
             content.canClose = false;
         }
         else { //Close About
-
             content = this.getContent(this.props.gameStatus, this.props.players);
         }
 
@@ -241,7 +260,7 @@ class Menu extends Component {
         );
     }
 
-    //Contents 
+    //Contents
     //About Body
     aboutBody = <div>
         <p className="modal-body-t1">Backgammon by Bruno Nunes</p>
@@ -254,6 +273,14 @@ class Menu extends Component {
     </p>
     </div>
     //End About Body
+
+    //About button
+    aboutButton = <button id="modal-about" className="btn btn-info"
+        onClick={this.toggleAboutHandler.bind(this, true)}>
+        About
+    </button>
+    //End about button
+
 }
 
 export default Menu;

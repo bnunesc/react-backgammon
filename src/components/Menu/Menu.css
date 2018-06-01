@@ -64,8 +64,10 @@
     font-size: 2.5vw;
 }
 
+
 #modal-footer {
     position: relative;
+    margin-top: 5%;
     text-align: right;
 }
 

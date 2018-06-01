@@ -33,6 +33,12 @@ class App extends Component {
 
     //set up new game
     setupNewGameHandler = (playerNames, playerStarts) => {
+        
+        console.log(playerStarts);
+        console.log(playerNames);
+        
+        
+
         const gameStatus = 11; //New game
         const history = [];
         const currentPosition = 0
