@@ -46,6 +46,14 @@
     font-size: 5vw;
 }
 
+#modal-body input {
+    height: 4vw;
+}
+
+#modal-body button {
+    height: 4vw;
+}
+
 #modal-body img{
     width: 100%;
     margin: 0;
