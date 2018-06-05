@@ -63,3 +63,11 @@ div.canMove {
     50% {box-shadow: 2px 2px 5px 3px rgba(255, 255, 255, 0.0) inset;}
     100% {box-shadow: 0 0 15px 50px var(--canMove) inset;}
 }
+
+@media screen and (max-width: 800px) {
+    @keyframes canMove {
+        0% {box-shadow: 0 0 5px 20px var(--canMove) inset;}
+        50% {box-shadow: 2px 2px 5px 3px rgba(255, 255, 255, 0.0) inset;}
+        100% {box-shadow: 0 0 5px 20px var(--canMove) inset;}
+    }
+  }

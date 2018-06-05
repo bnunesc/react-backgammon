@@ -4,7 +4,6 @@ import './RollButton.css';
 
 const rollButton = (props) => {
 
-//    console.log("Roll Button");
     let clickable = '';
     if (props.clicked){
         clickable = ' clickable';

@@ -20,7 +20,6 @@ const board = (props) => {
         }
     }
 
-
     return (
 
         <div id="board" className="container-fluid">

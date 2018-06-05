@@ -34,11 +34,6 @@ class App extends Component {
     //set up new game
     setupNewGameHandler = (playerNames, playerStarts) => {
         
-        console.log(playerStarts);
-        console.log(playerNames);
-        
-        
-
         const gameStatus = 11; //New game
         const history = [];
         const currentPosition = 0
@@ -54,28 +49,15 @@ class App extends Component {
         history.push(this.setHistory(p1IsNext, dice, points, grayBar, outSideBar));
 
         //set points
-        // points[0] = { player: 1, checkers: 2 };
-        // points[11] = { player: 1, checkers: 5 };
-        // points[16] = { player: 1, checkers: 3 };
-        // points[18] = { player: 1, checkers: 5 };
+        points[0] = { player: 1, checkers: 2 };
+        points[11] = { player: 1, checkers: 5 };
+        points[16] = { player: 1, checkers: 3 };
+        points[18] = { player: 1, checkers: 5 };
 
-        // points[23] = { player: 2, checkers: 2 };
-        // points[12] = { player: 2, checkers: 5 };
-        // points[7] = { player: 2, checkers: 3 };
-        // points[5] = { player: 2, checkers: 5 };
-
-        //Temporary
-        // Delete
-        points[20] = { player: 1, checkers: 2 };
-        points[21] = { player: 1, checkers: 5 };
-        points[23] = { player: 1, checkers: 3 };
-        //        points[18] = { player: 1, checkers: 5 };
-        grayBar.checkersP1 = 5;
-
-        //points[2] = { player: 2, checkers: 3 };
-        points[0] = { player: 2, checkers: 2 };
-        outSideBar.checkersP2 = 13
-        //Finish Delete
+        points[23] = { player: 2, checkers: 2 };
+        points[12] = { player: 2, checkers: 5 };
+        points[7] = { player: 2, checkers: 3 };
+        points[5] = { player: 2, checkers: 5 };
 
         this.setState({
             gameStatus: gameStatus,

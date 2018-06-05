@@ -33,8 +33,6 @@ const Triangle = (props) => {
         pointContainerClasses += ' containerClickable';
     }
 
-
-
     return (
         <div className="triangle col-xs-2 " >
             <div className={"trianglePart triangleLeft" + classOrientation + classColor + classReceivable}></div>
